@@ -1,0 +1,401 @@
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+html{
+    user-select: none;
+    cursor: default;
+    font-family: sans-serif;
+}
+
+.notSelect {
+    user-select: none!important;
+    cursor: default;
+}
+
+body{
+    background: rgb(54, 54, 54);
+    color: rgba(250, 250, 250, 0.87);
+    margin: 0px;
+}
+
+header {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 6vh;
+    padding-top: 3vh;
+    text-align: center;
+    text-shadow: 2px 2px 2px rgba(39, 39, 39, 0.91);
+    background: rgba(150,150,150,1);
+    -webkit-app-region: drag;
+}
+
+small {
+    font-size: 0.7em;
+}
+
+app {
+    width: 98vw;
+    height: 94vh;
+    position: fixed;
+    top: 6vh;
+}
+
+#online-status {
+    position: absolute;
+    width: 15%;
+    top: -3.758vh;
+    left: 2px;
+    height: 3.5vh;
+    padding-top: 3px;
+}
+
+nav {
+    width: 25vw;
+    background: rgba(150, 150, 150, 1);
+    position: fixed;
+    top: 10vh;
+}
+
+#ol {
+    width: 100%;
+    height: 98vh;
+    position: relative;
+}
+
+.nav-ol-child {
+    width: 100%;
+    height: 6vh;
+    color: rgba(250, 250, 250, 0.87);
+    background: rgba(54, 54, 54, 1);
+    margin-bottom: 2px;
+    text-align: center;
+    padding-top: 4vh;
+    text-shadow: 2px 2px 2px rgba(39, 39, 39, 0.91);
+}
+
+.nav-ol-child:hover, .nav-ol-selected {
+    background: rgba(54, 54, 54, 0.659);
+}
+
+/*Orange text*/
+.orange {
+    color: rgba(255, 177, 0, 0.96);
+}
+
+
+#messBox {
+    position: fixed;
+    bottom: 0px!important;
+    left: 27vw;
+    width: 70vw;
+    height: 20vh!important;
+    border: 2px solid rgba(0,0,0,1);
+    background: rgba(150,150,150,1);
+    overflow: scroll;
+    color: black;
+    text-align: center;
+    padding-top: 15px;
+    opacity: 0;
+    z-index: -3000;
+}
+
+.messBox_text, #exist-pref-div {
+    user-select: text;
+    cursor: auto;
+}
+
+#main-content {
+    width: 70vw;
+    height: 90vh;
+    border: 2px solid rgba(0,0,0,0);
+    border-radius: 5px;
+    position: fixed;
+    top: 10vh;
+    left: 27vw;
+    overflow: scroll;
+    z-index: 1;
+}
+/*
+#pickFold {
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonface;
+    border-image: initial;
+    background-color: buttonface;
+    color: rgba(0,0,0,0.8);
+    text-align: center;
+    font-size: 1em;
+    width: 62vw;
+    height: 8vh;
+    position: fixed;
+    top: 62vh;
+    left: 30.5vw;
+    border-radius: 5px;
+    padding: 2vh;
+}
+*/
+#build-sign-existingK-div {
+    background: rgb(54, 54, 54)!important;
+    width: 99%;
+    height: 25vh;
+    overflow: scroll;
+    margin: 5px 0px 0px 0px;
+}
+
+.pluginDiv-child {
+    width: 95.5%!important;
+    margin: 4px 4px 0px 4px!important;
+}
+
+#user-project-destination-input-file, #keystore-destination-input-file {
+    border: 1px solid black;
+    position: fixed;
+    top: 80vh;
+    left: 270vw;
+    width: 1px;
+    height: 0px;
+    opacity: 1;
+}
+
+#user-www-input-file {
+    border: 1px solid black;
+    height: 90vh;
+    opacity: 0;
+    z-index: 10;
+    position: relative;
+    top: -3vh;
+    left: -3vw;
+}
+
+#pickWwwFold {
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonface;
+    border-image: initial;
+    background-color: buttonface;
+    color: rgba(0,0,0,0.8);
+    text-align: center;
+    font-size: 1em;
+    width: 62vw;
+    height: 8vh;
+    position: fixed;
+    top: 29vh;
+    left: 30.5vw;
+    border-radius: 5px;
+    padding: 2vh;
+    z-index: -5;
+}
+
+.inputWidth{
+    width: 92%!important;
+    margin: 2vh;
+}
+
+input, button {
+    padding: 4px;
+    width: 96%;
+    margin: 2vh;
+    border-radius: 5px;
+}
+
+#prgrs-svg {
+    width: 70vw;
+    position: relative;
+    bottom: 0vh;
+    left: 0vw;
+    border: 0px solid black;
+}
+
+.greyDivNavActive {
+    background: rgba(54, 54, 54, 0.659);
+}
+
+.div-opt-container, .projects-page-base-div-data-container {
+    float: right;
+    display: inline;
+    margin: auto;
+    text-align: right;
+}
+
+.projects-page-base-div-data-container {
+    font-size: 0.7em;
+}
+
+.div-proj-selected {
+    background: rgba(150, 150, 150, 0.5)!important;
+}
+
+.projects-page-base-divOptPath {
+    font-size: 1.5em!important;
+    color: rgba(255, 177, 0, 0.96);
+    padding-top: 5px;
+}
+
+.pluginDivChidren, .verDiv {
+    display: inline-block;
+    padding: 3px;
+    border: 1px solid black;
+    margin-right: 1vw;
+    border-radius: 3px;
+    text-shadow: 2px 1px 1px rgba(54, 54, 54, 0.35);
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: lighter;
+    background: rgba(0, 0, 0, 0);
+}
+
+.pluginDivChidren:hover {
+    background: rgba(54, 54, 54, 0.8);
+    color: inherit;
+}
+
+.remote-butt {
+    position: absolute;
+    z-index: 100000;
+    width: 135px;
+    height: 25px;
+    background: grey;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.pluginDiv, .projects-page-base-div {
+    width: 68vw;
+    background: rgba(150, 150, 150, 1);
+    padding: 0.75vh 1vw 0.8vh;
+    margin: 4px;
+    text-shadow: 2px 2px 2px rgba(39, 39, 39, 0.91);
+    float: left;
+}
+
+#cfxml-save-pref-button {
+    float: right;
+}
+
+.projects-page-base-div:hover {
+    background: rgba(150, 150, 150, 0.5);
+}
+
+.verDiv {
+    float: right;
+    border: 0px;
+}
+.vers {
+    color: rgba(0, 0, 255, 0.6);
+    text-shadow: 0px 0px 1px rgba(49, 49, 255, 0.5);
+    font-weight: bold;
+    float: right;
+    background: rgba(0, 0, 0, 0);
+}
+
+.v {
+    color: rgba(250, 250, 250, 0.70);
+    text-shadow: 2px 2px 2px rgba(39, 39, 39, 0);
+}
+
+#exist-plug-div, #exist-pref-div {
+    color: rgba(54, 54, 54, 1);
+    text-shadow: 0px 0px 0px rgba(39, 39, 39, 0)!important;
+    width: 60%;
+}
+
+.platDocMenu {
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+    margin-top: 1vh;
+}
+
+.platDocMenuItem {
+    margin-top: 0.5vh;
+}
+
+.platDocMenuItem:hover {
+    color: rgba(255, 177, 0, 0.96);
+}
+
+.bldDiv input {
+    padding: 1vh;
+    margin: 0px;
+}
+
+textarea {
+    width: 98%;
+    height: 10vh;
+}
+
+.cfxml-valid-button {
+    position: fixed;
+    bottom: 1vh;
+    right: 1vw;
+    background: rgba(65,65,65,0.3);
+    text-align: center;
+    border: 1px solid white;
+    padding: 3px;
+}
+
+.cfxml-valid-button:hover {
+    background: rgba(65,65,65,1);
+}
+
+#window-option-container {
+    width: 106px;
+    position: relative;
+    top: -6.5vh;
+    left: 85vw;
+    border: 0px solid black;
+}
+
+.window-buttons {
+    width: 20%;
+    display: inline-block;
+    margin: 5px 0px 0px 12px;
+    border: 0px solid black;
+    -webkit-app-region: no-drag;
+    padding-top: 2vh;
+}
+
+#toggle-remote-button {
+    /* width: 100%; */
+    display: inline-block;
+    margin: 6px;
+    border: 1px solid black;
+    text-align: center;
+    padding-top: 7px;
+    box-shadow: 2px 2px 2px rgba(39, 39, 39, 0.3);
+}
+
+#create-button {
+    float: right;
+    padding: 5px;
+    margin: 5px 0px;
+}
+
+#create-blank-button {
+    position: absolute; 
+    top: 400px;
+    z-index: 12;
+    width: 98%;
+    height: 25px;
+    padding-top: 10px;
+    text-align: center;
+    background: rgba(154, 154, 154, 1);
+    font-weight: bolder;
+}
+
+#authorItems input {
+    margin-top: 2px;
+}
+
+/**style for SVG*/
+.svg-window-buttons {
+    border: 0px solid black;
+    border-radius: 4px;
+}
+
+
+
+
+

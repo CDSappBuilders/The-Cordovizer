@@ -1,0 +1,38 @@
+{
+  "name": "Cordovizer",
+  "main": "index.html",
+  "dependencies": {
+    "cordova-config": "^0.6.2",
+    "fs-extra": "^1.0.0",
+    "highlight.js": "^9.8.0",
+    "marked": "^0.3.6",
+    "ncp": "^2.0.0",
+    "nprogress": "^0.2.0",
+    "showdown": "^1.5.0",
+    "showdown-table": "^1.0.1",
+    "xml2js": "^0.4.17"
+  },
+  "window": {
+    "id": "987654321",
+    "title": "CordovaGUI",
+    "icon": "",
+    "toolbar": false,
+    "frame": false,
+    "width": 800,
+    "height": 650,
+    "position": "center",
+    "min_width": 0,
+    "min_height": 0,
+    "resizable": true
+  },
+  "webview": {
+    "partitions": [
+      {
+        "name": "trusted",
+        "accessible_resources": [
+          "<all_urls>"
+        ]
+      }
+    ]
+  }
+}
