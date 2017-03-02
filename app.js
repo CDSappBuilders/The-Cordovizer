@@ -22,10 +22,7 @@ var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line
 /**
 *Setting main content
 */
-const content = () => {
-	$('<section/>', {id:'main-content', title:''}).appendTo('app');
-	$('<div/>', {id:'messBox'}).appendTo('app');
-};
+
 
 
 
@@ -136,19 +133,19 @@ const nav = () => {
     /**
      * Function to highlight selected ol-child
      * jQuery removed***
+     * 
+     * Try foreach will be better
      *
      * @param      {String}    whichOne  The element selector
      * @param      {Function}  pageFn    The function that displays the correspondant view
      */
     function selectOl (whichOne, pageFn) {
-        //$('.nav-ol-child').removeClass('nav-ol-selected');
         //get element for removing
         var nolc = document.querySelector('.nav-ol-child');
 
         //remove class
         nolc.classList.remove('nav-ol-selected');
 
-        //$(whichOne).addClass('nav-ol-selected');
         //get element for adding
         var nolcS = document.querySelector(whichOne);
 
@@ -161,9 +158,9 @@ const nav = () => {
 
 
     //test buttons
-    //$('<button id="but" value="TestButton">TestButton</button>').appendTo('#ol');
+    $('<button id="but" value="TestButton">TestButton</button>').appendTo('#ol');
     //$('<button id="but2" value="TestButton2">TestButton2</button>').appendTo('#ol');
-	$('#but').on('click', () => {
+	//$('#but').on('click', () => {
         //test to identify windows and act with them
             //chrome.app.window.create(`chrome://inspect/#devices/`, {id: '12'}, () => {});
             //chrome.app.window.create(`./new_window_open/cre.html`, {id: '123456789'}, () => {});
@@ -178,11 +175,16 @@ const nav = () => {
 
         //test for xml2js
             //this function is in app.js
-            xml(`${curWDir}\\config.xml`,`${curWDir}\\config.json`);
+            //xml(`${curWDir}\\config.xml`,`${curWDir}\\config.json`);
 
         //test for resize window
         //runProject.reduceCurWin(50, 20, () => {});
+    //});
+    //test evcl
+    nojq.evcl('but', 'click', () => {
+        $('header').css('background', 'red');
     });
+    
     $('#but2').click(() => {
         var winObjTest = chrome.app.window.getAll();
         //winObjTest[1].close();
@@ -190,33 +192,42 @@ const nav = () => {
     });
 };
 
-//Cordo createProj
-//
+/**
+ * Object to contain create view stuff
+ *
+ * @type       {Object}     
+ */
 var createProj = {};
-//createProj a new cordova project from user code
-//
 //Drag Drop user code folder: this is the first view
+
+/**
+ * Function first view: user could drop a folder containing web code
+ * or create a hellocordova project to start from scratch
+ *
+ * @return     {<type>}  { description_of_the_return_value }
+ */
 createProj.drop = () => {
 
-    //set content
-    nojq.fc( '#main-content', `   
+    /**
+     * Fill main-content
+     */
+    nojq.fc('#main-content', `   
         <input id="user-www-input-file" title="Pick a folder" type="file" nwdirectory="">
         <div id="pickWwwFold"><bold>Pick your code folder</bold><br>
         <small>.html .js .css</small></div>
         `);
     
     //set header content
-    //TODO: check if curwwdir ir here to avoid overwriting header
-    //go for it
-    if ($('header').html() == curWDir) {}
-
-    else {
+    var headcont = document.querySelector('header').innerHTML;
+    if (headcont != curWDir) {
         //fill header when no project selected
-        nojq.fc( 'header', `Meet the Cordovizer`);
+        nojq.fc('header', `Meet the Cordovizer`);
     }
-	
+
     //action when folder is dropped
-	$('#user-www-input-file').on('change', () => {
+	//var uwif = document.querySelector('#user-www-input-file');
+
+    $('#user-www-input-file').on('change', () => {
         //get user code folder path
 		var a = $('#user-www-input-file').val();
 		//messageBox.comeon(a);
@@ -250,7 +261,7 @@ createProj.drop = () => {
 createProj.page = () => {
 
     //empty content !!!!!! modified!!
-	nojq.fc(  '#main-content', '');
+	nojq.fc('#main-content', '');
     
     //Name div
     $('<div/>', {
@@ -379,7 +390,7 @@ createProj.action = () => {
             curWDir = `${pth}\\${fold}`;
 
             //Fill it
-            nojq.fc( 'header', curWDir);
+            nojq.fc('header', curWDir);
 
             //record this in ./user/projects.json file
             createProj.projectsJson(`${pth}\\${fold}`, name);
@@ -410,7 +421,7 @@ createProj.changeWww = (p,f,www,n) => {
 
     //indicate cwd in header
     //
-    nojq.fc( 'header', cordoPath);
+    nojq.fc('header', cordoPath);
 
     //replacement append here
 	fse.remove(`${cordoPath}\\www`, (err) => {
@@ -461,7 +472,7 @@ createProj.projectsJson = (foldPath, n) => {
 //Choose a project for CWD
 const chooseProject = () => {
     //empty content
-    nojq.fc(  '#main-content', '');
+    nojq.fc('#main-content', '');
 
 
     //read the file containing projects data
@@ -480,7 +491,7 @@ const chooseProject = () => {
                 click: () => {
                     curWDir = value.path;
                     //Fill header with nojq.fc( )
-                    nojq.fc( 'header', curWDir);
+                    nojq.fc('header', curWDir);
 
                     //Change color on select
                     $('.div-proj-selected').removeClass('div-proj-selected');
@@ -522,7 +533,7 @@ var pl = {};
 //add native plug
 pl.page = () => {
 	//empty content
-    nojq.fc(  '#main-content', '');
+    nojq.fc('#main-content', '');
 
     //get already installed plugins in cwd
     fse.readdir(`${curWDir}\\plugins`,(err,files) => {
@@ -606,7 +617,7 @@ pl.page = () => {
 pl.thptyPage = () => {
     //clear view
     //empty content
-    nojq.fc(  '#main-content', '');
+    nojq.fc('#main-content', '');
 
     //and set content
     /**
@@ -858,7 +869,7 @@ pl.removePlug = (val) => {
         $(`#${val}`).removeClass('div-proj-selected');
 
         //fc to fill that, it's a test
-        nojq.fc( `#${val}_plugAdd`, 'Add plugin');
+        nojq.fc(`#${val}_plugAdd`, 'Add plugin');
 
         fse.readdir(`${curWDir}\\plugins`,(err,files) => {
             addedPlug = files;
@@ -872,7 +883,7 @@ pl.afterAddPlu = (a) => {
                      $(`#${a}_plugAdd`).attr('data-added', 1);
 
                      //test fc again
-                     nojq.fc( `#${a}_plugAdd`, 'Remove');                
+                     nojq.fc(`#${a}_plugAdd`, 'Remove');                
 };
                  
 /**
@@ -886,7 +897,7 @@ runProject.page = () => {
     if(curWDir===undefined){messageBox.comeon('Please select a project or create a new one');}
     else {
         //empty content
-        nojq.fc(  '#main-content', '');
+        nojq.fc('#main-content', '');
 
         //get existing platforms with userProject/platforms/platforms.json and make a div with $.each
         fse.readJson(`${curWDir}\\platforms\\platforms.json`, (err, plats) => {
@@ -990,7 +1001,7 @@ runProject.reduceCurWin = (cb) => {
 
     //handle header
         //empty it
-    nojq.fc( 'header', '');
+    nojq.fc('header', '');
 
         //enhance it
     $('header').css('height', '30px');
@@ -1067,7 +1078,7 @@ runProject.appendNewButton = (platform) => {
         curWin.resizeTo(800, 500);
 
         //re-fill header
-        nojq.fc( 'header', curWDir)
+        nojq.fc('header', curWDir)
 
         //header resize
         $('header').css('height', '6vh');
@@ -1185,7 +1196,7 @@ plat.checkPlat = () => {
             $.each(files, (i, v) => {
                 if (v==='platforms.json') {}
                 else {
-                    exnojq.fc(  `cordova requirements ${v} `, {cwd:curWDir}, (error, stderr, stdout) => {
+                    exec(  `cordova requirements ${v} `, {cwd:curWDir}, (error, stderr, stdout) => {
                         if (error) {
                             messageBox.comeon(error);
                             console.log(error);
@@ -1208,7 +1219,7 @@ plat.checkPlat = () => {
 plat.menu = () =>{
 
     //empty content
-    nojq.fc(  '#main-content', '');
+    nojq.fc('#main-content', '');
 
     //make div for each avaible platform
     $.each(plat.platform, (key,value) =>{ 
@@ -1343,7 +1354,7 @@ plat.rm = (a) => {
             //change button style and text to 'add' or 'remove'
             $(`#${a}`).css('border','0px');
             $(`#${a}_platAdd`).attr('data-added',0);
-            nojq.fc( `#${a}_platAdd`, 'Add platform');
+            nojq.fc(`#${a}_platAdd`, 'Add platform');
         
         }
     });
@@ -1359,7 +1370,7 @@ plat.page = () => {
 plat.btnChange = (a) => {
     $(`#${a}`).css('border','2.555px solid blue');
     $(`#${a}_platAdd`).attr('data-added', 1);
-    nojq.fc( `#${a}_platAdd`, 'Remove');
+    nojq.fc(`#${a}_platAdd`, 'Remove');
 };
 
 /**
@@ -1370,7 +1381,7 @@ var cfxml = {};
 //FrontEnd
 cfxml.page = () => { //TODO: update config.json with new config.xml
     //empty content
-    nojq.fc(  '#main-content', '');
+    nojq.fc('#main-content', '');
     
     //check for selected project
     if (curWDir===undefined){
@@ -1708,7 +1719,7 @@ var bld = {};
 //y Vamos
 bld.page = () => {
     //empty content
-    nojq.fc(  '#main-content', '');
+    nojq.fc('#main-content', '');
 
     //android title div
     $('<div/>', {
@@ -2083,7 +2094,10 @@ messageBox.comeon = (message) => {
     var isRunning = $('header').attr('data-runbutt');
     if (isRunning == 0) {
 
-        //empty message box and put it on top of all other divs
+        //empty message box 
+        nojq.fc('#messBox', '');
+
+        //and put it on top of all
         $('#messBox').css({
             'z-index': 1000,
             opacity: 1
@@ -2154,8 +2168,7 @@ noFrame.buttons = () => {
 
     //sets a div to contain buttons
     $('<div/>', {
-        id: 'window-option-container',
-        'class': ''
+        id: 'window-option-container'
     }).appendTo('app');
 
     $('<div/>', {id: 'online-status'}).appendTo('app');
@@ -2331,9 +2344,7 @@ setInterval(() => {
 *   We will use very short names hope you've got a good editor...
 */
 
-
-
- /**
+/**
   * The object containing all 'remove jQuery' functions
   *
   * @type       {object}
@@ -2359,6 +2370,21 @@ nojq.fc = (el, html, cb) => {
         cb();
     }
 };
+
+/**
+ * Shorcut for event handlers just in case
+ *
+ * @param      String  elementId  The element identifier
+ * @param      String  evt        The event
+ * @param      Function  handler    The handler
+ */
+nojq.evcl = (elementId, evt, handler) => {
+    if(elementId) {
+        //get elem and set handler in one phrase
+        document.getElementById(elementId).addEventListener(evt, handler);
+    }
+};
+//nojq end
 
 /**
  * Former app.js with declarations of node_modules with their parameters when needed
@@ -2443,7 +2469,6 @@ const Config = require('cordova-config');
 
 //tmpl
 nav();
-content();
 
 //First view
 createProj.drop();
