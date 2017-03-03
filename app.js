@@ -2,7 +2,7 @@
 /*globals nw, exec, path, progrSs, fse, xmlParser, marked */
 
 
-
+ 
 
 
 //Get main window object
@@ -16,125 +16,148 @@ curWin.on('loaded', () => {
     onl.check();
 });
 
-//Globals
+/**
+ * Globals
+ */
 var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line;
 
 /**
-*Setting main content
+* Slowly but surely removing jquery by little functions here      ///////////////////////////////
+* We will use very short names hope you've got a good editor...  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 */
 
+/**
+  * Containing all 'remove jQuery' functions
+  *
+  * @type       {object}
+  */
 
+var nojq = {
+/**
+ * Fill Content function = fc Didn't say it would be easy !!
+ *
+ * @param      {string}     el      The element to fill !css
+ * @param      {string}     html    The html
+ * @param      {function}   cb      A function in case you need do something after html things
+ */
+    fc : (el, html, cb) => {
+        //Get element
+        var cont = document.querySelector(el);
 
+        //fill element
+        cont.innerHTML = html;
+
+        //cb
+        if (cb) {
+            cb();
+        }
+    },
+
+/**
+ * Shorcut for event handlers
+ *
+ * @param      {string}     elementId  The element identifier
+ * @param      {string}     evt        The event
+ * @param      {function}   handler    The handler
+ */
+    evhl : (elementId, evt, handler) => {
+        if(elementId) {
+            //get elem and set handler in one phrase
+            document.querySelector(elementId).addEventListener(evt, handler);
+        }
+    },
+//create elem 
+//TODO: have to end this
+    ce : (el, appendIn, setId, setClass, setClass2, content, event, eventHandle) => {
+        //element to create
+        var elem = document.createElement(el);
+
+        //append to his new beloved parent
+        document.querySelector(appendIn).appendChild(elem);
+
+        //set ID if provided
+        if (setId) {
+            elem.id = setId;
+        }
+
+        //set class
+        if (setClass) {
+            elem.classList.add(setClass);
+        }
+
+        //set class2
+        if (setClass2 != '') {
+            elem.classList.remove(setClass);
+            elem.classList.add(setClass, setClass2);
+        }
+        
+        //set content
+        if (content) {
+            elem.innerHTML = content;
+        }
+        
+
+        //set events things
+        if (event || eventHandle) {
+            var elId = ` #${elem.id} `;
+            nojq.evhl(elId, event, eventHandle);
+        }
+    }    
+};
+//nojq end
+
+/**
+*Setting main content event handlers
+*/
+
+//Minimize button
+nojq.evhl('#miniM', 'click', ()=>{curWin.minimize();});
+
+//Maximise button
+nojq.evhl('#fullS', 'click', ()=>{
+            //another data attr for the header to check if window is maximised
+            var dataMax = $('header').attr('data-max');
+
+            if (dataMax == 0) {
+                curWin.maximize();
+                $('header').attr('data-max', 1);
+            }
+            else {
+                curWin.restore();
+                $('header').attr('data-max', 0);
+            }
+        });
+
+//Close button
+nojq.evhl('#closeW', 'click', ()=>{curWin.close();});
+
+/**
+ * Setting nav event handlers
+ * ID's speaking for themselves
+ */
+nojq.evhl('#projects-page', 'click', ()=>{selectOl('#projects-page', chooseProject);});
+nojq.evhl('#create-page', 'click', ()=>{selectOl('#create-page', createProj.drop);});
+nojq.evhl('#plugins-page', 'click', ()=>{
+    selectOl('#core-plugins-page', pl.page);
+    $('#core-plugins-page, #thpty-plugins-page').slideToggle();
+    $('#plugins-page').hide();
+});
+nojq.evhl('#core-plugins-page', 'click', ()=>{selectOl('#core-plugins-page', pl.page);});
+nojq.evhl('#thpty-plugins-page', 'click', ()=>{selectOl('#thpty-plugins-page', pl.thptyPage);});
+nojq.evhl('#platforms-page', 'click', ()=>{selectOl('#platforms-page', plat.checkPlat);});
+nojq.evhl('#configxml-page', 'click', ()=>{selectOl('#configxml-page', cfxml.page);});
+nojq.evhl('#run-page', 'click', ()=>{selectOl('#run-page', runProject.page);});
+nojq.evhl('#build-page', 'click', ()=>{selectOl('#build-page', bld.page);});
 
 /**
 *Navigation
 */
-const nav = () => {
-    //sets nav in place
-	$('<nav/>').appendTo('app');
 
-    //and an ol section and not ol tag can't remember why
-	$('<section/>', {id:'ol'}).appendTo('nav');
-
-    //Projects
-	$('<div/>',{
-        id:'projects-page',
-        html:'Projects',
-        'class':'nav-ol-child',
-        click: () => {
-            selectOl('#projects-page', chooseProject);
-        }
-    }).appendTo('#ol');
-
-    //Create
-	$('<div/>',{
-        id:'create-page',
-        html:`Create`,
-        'class':'nav-ol-child',
-        click: () => {
-            selectOl('#create-page', createProj.drop);
-        }
-    }).appendTo('#ol');
-    
-    //Plugins
-    $('<div/>',{
-        id:'plugins-page',
-        html:'Plugins',
-        'class':'nav-ol-child',
-        click: () => {
-            selectOl('#core-plugins-page', pl.page);
-            $('#core-plugins-page, #thpty-plugins-page').slideToggle();
-            $('#plugins-page').hide();
-        }
-    }).appendTo('#ol');
-
-    //Plugins sub menu
-    //Core or Native 
-    $('<div/>',{
-        id:'core-plugins-page',
-        html:'Core plugins',
-        'class':'nav-ol-child',
-        click: () => {
-            selectOl('#core-plugins-page', pl.page);
-        }
-    }).appendTo('#ol').hide();
-
-    //3rd Pty plugin
-    $('<div/>',{
-        id:'thpty-plugins-page',
-        html:'3rd Party plugins',
-        'class':'nav-ol-child',
-        click: () => {
-            selectOl('#thpty-plugins-page', pl.thptyPage);
-        }
-    }).appendTo('#ol').hide();
-
-    //platform 
-    $('<div/>',{
-        id:'platforms-page',
-        html:'Platform',
-        'class':'nav-ol-child',
-        click: () => {
-            selectOl('#platforms-page', plat.checkPlat);
-        }
-    }).appendTo('#ol');
-
-    //Config.xml
-    $('<div/>',{
-        id:'configxml-page',
-        html:`Edit config.xml`,
-        'class':'nav-ol-child',
-        click: () => {
-            selectOl('#configxml-page', cfxml.page);
-        }
-    }).appendTo('#ol');  
-
-    //Run
-	$('<div/>',{
-        id:'run-page',
-        html:'Run',
-        'class': 'nav-ol-child',
-        click: () => {
-            selectOl('#run-page', runProject.page);
-        }
-    }).appendTo('#ol');
-
-    //Build
-	$('<div/>',{
-        id:'build-page',
-        html:'Build',
-        'class':'nav-ol-child',
-        click:() => {
-            selectOl('#build-page', bld.page);
-        }
-    }).appendTo('#ol');
-    //$('<a/>',{id:'testLink', html:'TestLink', href:'http://cordova.apache.org/plugins', target:'_blank'}).appendTo('#ol');
-	
     /**
      * Function to highlight selected ol-child
      * jQuery removed***
      * 
-     * Try foreach will be better
+     * //TODO: Try foreach will be better
      *
      * @param      {String}    whichOne  The element selector
      * @param      {Function}  pageFn    The function that displays the correspondant view
@@ -158,42 +181,13 @@ const nav = () => {
 
 
     //test buttons
-    $('<button id="but" value="TestButton">TestButton</button>').appendTo('#ol');
-    //$('<button id="but2" value="TestButton2">TestButton2</button>').appendTo('#ol');
-	//$('#but').on('click', () => {
-        //test to identify windows and act with them
-            //chrome.app.window.create(`chrome://inspect/#devices/`, {id: '12'}, () => {});
-            //chrome.app.window.create(`./new_window_open/cre.html`, {id: '123456789'}, () => {});
-        /**
-        * chrome.app.window.create(`chrome://inspect/#devices/`, {
-        *id: "mytestwindowid",
-        *height: 250,
-        *frame: "none"
-        *
-        *});
-        */
-
-        //test for xml2js
-            //this function is in app.js
-            //xml(`${curWDir}\\config.xml`,`${curWDir}\\config.json`);
-
-        //test for resize window
-        //runProject.reduceCurWin(50, 20, () => {});
-    //});
-    //test evcl
-    nojq.evcl('but', 'click', () => {
+    //test evhl
+    nojq.evhl('#but', 'click', () => {
         $('header').css('background', 'red');
     });
-    
-    $('#but2').click(() => {
-        var winObjTest = chrome.app.window.getAll();
-        //winObjTest[1].close();
-        console.log(winObjTest);
-    });
-};
 
 /**
- * Object to contain create view stuff
+ * Object to contain create project
  *
  * @type       {Object}     
  */
@@ -204,7 +198,7 @@ var createProj = {};
  * Function first view: user could drop a folder containing web code
  * or create a hellocordova project to start from scratch
  *
- * @return     {<type>}  { description_of_the_return_value }
+ * 
  */
 createProj.drop = () => {
 
@@ -218,41 +212,43 @@ createProj.drop = () => {
         `);
     
     //set header content
-    var headcont = document.querySelector('header').innerHTML;
-    if (headcont != curWDir) {
+    //var headcont = document.querySelector('header').innerHTML;
+    if (document.querySelector('header').innerHTML != curWDir) {
         //fill header when no project selected
         nojq.fc('header', `Meet the Cordovizer`);
     }
 
     //action when folder is dropped
-	//var uwif = document.querySelector('#user-www-input-file');
-
-    $('#user-www-input-file').on('change', () => {
-        //get user code folder path
-		var a = $('#user-www-input-file').val();
-		//messageBox.comeon(a);
+    //nojq way
+    nojq.evhl('#user-www-input-file', 'change', () => {
+        //get user code folder path,
+        var a = $('#user-www-input-file').val();
+        //messageBox.comeon(a);
 
         //parse the path to get supposed name of the app
-		var appN = path.parse(a);
+        var appN = path.parse(a);
 
         //make it global
         WwwDir = a;
 
         //make the name global
-		dirN = appN.name;
+        dirN = appN.name;
 
         //display the page
         createProj.page();
-	});
+    });
 
-    //Create blank button
-    $('<div/>', {
-        id: 'create-blank-button',
-        'class': 'pluginDivChidren',
-        text: 'Create blank project'
-    }).appendTo('#main-content').click(() => {
-        //display the page
-        createProj.page();
+    //Create blank button REPLACEMENT in progress
+    nojq.ce('div',
+        '#main-content',
+        'create-blank-button',
+        'pluginDivChidren',
+        '',
+        'Create blank project',
+        'click',
+        () => {
+            //display the page
+            createProj.page();
     });
 };
 
@@ -261,92 +257,57 @@ createProj.drop = () => {
 createProj.page = () => {
 
     //empty content !!!!!! modified!!
-	nojq.fc('#main-content', '');
+	nojq.fc('#main-content', `<div id="create-page-name-div" class="pluginDiv">Name
+        <br>
+        <input id="create-page-name-input" type="text" placeholder="Sets the name of your app" class="inputWidth">
+    </div>
+    <div id="create-page-ID-div" class="pluginDiv">ID
+        <br>
+        <input id="create-page-app-id-input" type="text" placeholder="io.you.yourapp" class="inputWidth">
+    </div>
+    <div id="create-page-folder-div" class="pluginDiv">Folder
+        <br>
+        <input id="create-page-folder-name-input" type="text" placeholder="Sets the folder name of your app" class="inputWidth">
+    </div>
+    <div id="pickFold" class="pluginDiv">Output folder
+        <br>
+        <input id="create-page-output-folder-input" type="text" style="width:70%;" placeholder="Sets the location of your app">
+        <div class="pluginDivChidren" id="browse">Browse</div>
+        <input id="user-project-destination-input-file" title=" " type="file" nwdirectory="">
+    </div>
+    <div id="create-button" class="pluginDivChidren">Create</div>
+    <div style="margin: 50px 0px 0px 5px; width: auto;">This will create the default "hellocordova" app</div>`);
     
-    //Name div
-    $('<div/>', {
-        id: 'create-page-name-div',
-        'class': 'pluginDiv',
-        html: `Name<br>
-            <input id="create-page-name-input" 
-            type="text" placeholder="Sets the name of your app" 
-            class="inputWidth">`
-    }).appendTo('#main-content');
-
-    //id div
-    $('<div/>', {
-        id: 'create-page-ID-div',
-        'class': 'pluginDiv',
-        html: `ID<br>
-            <input id="create-page-app-id-input" 
-            type="text" placeholder="io.you.yourapp" 
-            class="inputWidth">`
-    }).appendTo('#main-content');
-
-    //folder div
-    $('<div/>', {
-        id: 'create-page-folder-div',
-        'class': 'pluginDiv',
-        html: `Folder<br>
-        <input id="create-page-folder-name-input" 
-        type="text" placeholder="Sets the folder name of your app" 
-        class="inputWidth">`
-    }).appendTo('#main-content');
-
-    //mask for the input file which is not pretty and displays 'choose a file' instead of '...a folder'
-    $('<div/>', {
-        id: 'pickFold',
-        'class': 'pluginDiv',
-        html: `Output folder<br>
-        <input id="create-page-output-folder-input" type="text" 
-        style="width:70%;" placeholder="Sets the location of your app">
-        <div class="pluginDivChidren" id="browse" >Browse</div>`
-    }).appendTo('#main-content');
-
-    //input file for output folder
-    $('<input>', {
-        id:'user-project-destination-input-file',
-        title:' ',
-        type: 'file',
-        nwdirectory:''
-    }).appendTo('#pickFold')
-    .change(() => {
+    /**
+     * Event handler for input file
+     */
+    nojq.evhl('#user-project-destination-input-file', 'change', () => {
         $('#create-page-output-folder-input')
         .val($('#user-project-destination-input-file').val());
     });
 
-    //button an input to trigger input file
-    $('#browse, #create-page-output-folder-input').click(() => {
-        $('#user-project-destination-input-file').click();
-    });
-
-    //create button
-    $('<div/>', {
-        'class': 'pluginDivChidren',
-        id: 'create-button',
-        text: 'Create'
-    }).appendTo('#main-content').click(() => { 
+    /**
+     * Event handler for create button
+     */
+    nojq.evhl('#create-button', 'click', () => { 
         setTimeout(createProj.action(),3000);
         progrSs.strt();
     });
 
-    //sets input values with folder name
+    /**
+     * Sets input values with folder name
+     */
     $('#create-page-name-input, #create-page-folder-name-input').val(dirN);
     if (dirN) {
         $('#create-page-app-id-input').val(`com.app.${dirN}`);
     }
 
-    //sets an explaination div for create blank
-    if (dirN===undefined) {$('<div/>', {
-            html: `This will create the default "hellocordova" app`,
-            css: {
-                margin: '50px 0px 0px 5px',
-                width: 'auto'
-            }
-        })
-        .appendTo('#main-content');
-    }
-    
+    /**
+     * button and input to trigger input file remanes jQ for now
+     */
+    $('#browse, #create-page-output-folder-input').click(() => {
+        $('#user-project-destination-input-file').click();
+    });
 };
 
 //do the thing
@@ -1719,141 +1680,34 @@ var bld = {};
 //y Vamos
 bld.page = () => {
     //empty content
-    nojq.fc('#main-content', '');
-
-    //android title div
-    $('<div/>', {
-        'class': 'pluginDiv',
-        html: 'Android build options',
-        css: {
-            'text-align': 'center'
-        }
-    }).appendTo('#main-content');
-
-    /**
-    *Build unsigned div
-    */
-    $('<div/>', {
-        id: 'build-unsign-div',
-        'class': 'pluginDiv',
-        html: 'Build unsigned'
-    }).appendTo('#main-content');
-
-    //opt container
-    $('<div/>', {
-        'class': 'div-opt-container'
-    }).appendTo('#build-unsign-div');
-
-    //Buttons for the preceding
-    //debug
-    $('<div/>', {
-        'class': 'pluginDivChidren',
-        html: 'Build debug'//add click
-    }).appendTo('#build-unsign-div .div-opt-container');
-
-    //release
-    $('<div/>', {
-        'class': 'pluginDivChidren',
-        html: 'Build release'//add click
-    }).appendTo('#build-unsign-div .div-opt-container');
+    nojq.fc('#main-content', `
+        <div class="pluginDiv" style="text-align: center;">Android build options</div>
+        <div id="build-unsign-div" class="pluginDiv">Build unsigned
+            <div class="div-opt-container">
+                <div class="pluginDivChidren">Build debug</div>
+                <div class="pluginDivChidren">Build release</div>
+            </div>
+        </div>
+        <!-- Build signed div -->
+        <div id="build-sign-div" class="pluginDiv">Build signed
+            <div id="build-sign-existingK-div"></div>
+            <div id="build-sign-inputs-div">
+                <input id="build-sign-Kstore-path-inp-file" type="file" nwdirectory="" require="true">
+                <input id="build-sign-Kstore-path-inp" placeholder="Path to existing keystore" require="true">
+                <input id="build-sign-KS-pass-input" placeholder="Keystore password">
+                <input id="build-sign-Kalias-input" placeholder="Alias">
+                <input id="build-sign-K-pass-input" placeholder="Key password">
+            </div>
+            <div class="div-opt-container">
+                <div id="build-sign-button" class="pluginDivChidren">Build</div>
+            </div>
+    </div>`);
 
     /**
     *Build signed //validation required here as in other forms //to check
     */
-    $('<div/>', {
-        id: 'build-sign-div',
-        'class': 'pluginDiv',
-        html: 'Build signed'
-    }).appendTo('#main-content');
-
-    //div to contain
-    $('<div/>', {
-        id: 'build-sign-existingK-div'
-    }).appendTo('#build-sign-div');
-
-    //and fill the previous div
-    fse.readJson('./user/keys/allkeys.json', (e, exK) => {
-        if (e) {console.log(e);}
-        else {
-            $.each(exK, (k, v) => {
-                $('<div/>', {
-                    id: k,
-                    'class': 'pluginDiv-child projects-page-base-div',
-                    html: k
-                }).appendTo('#build-sign-existingK-div')
-                .click(() => {
-                    //set path input
-                    $('#build-sign-Kstore-path-inp').val(`${v.Path}\\${k}`);
-
-                    //set keystore password
-                    $('#build-sign-KS-pass-input').val(`${v.Password}`);
-
-                    //set alias input
-                    $('#build-sign-Kalias-input').val(`${v.Alias}`);
-
-                    //set key pass
-                    $('#build-sign-K-pass-input').val(`${v.PasswordKey}`);
-                });
-
-                //append path to precedent
-                $('<div/>', {
-                    id: `${k}-opt`,
-                    html: `${v.Path}`,
-                    'class': 'div-opt-container orange'
-                }).appendTo(`#${k}`);
-            });
-        }
-    });
-
-    //div to contain input
-    $('<div/>', {
-        id: 'build-sign-inputs-div'
-    }).appendTo('#build-sign-div');
-
-    //Keystore path input file
-    $('<input>', {
-        id: 'build-sign-Kstore-path-inp-file',
-        type: 'file',
-        nwdirectory: '',
-        require: 'true'
-    }).appendTo('#build-sign-inputs-div');
-
-    //Input path
-    $('<input>', {
-        id: 'build-sign-Kstore-path-inp',
-        placeholder: 'Path to existing keystore',
-        require: 'true'
-    }).appendTo('#build-sign-inputs-div');
-
-    //Password input ( keystorePassword )
-    $('<input>', {
-        id: 'build-sign-KS-pass-input',//,type: 'password',
-        placeholder: 'Keystore password'
-    }).appendTo('#build-sign-inputs-div');
-
-    //Alias
-    $('<input>', {
-        id: 'build-sign-Kalias-input',
-        placeholder: 'Alias'
-    }).appendTo('#build-sign-inputs-div');
-
-    //Key password
-    $('<input>', {
-        id: 'build-sign-K-pass-input',//,type: 'password',
-        placeholder: 'Key password'
-    }).appendTo('#build-sign-inputs-div');
-
-    //opt container
-    $('<div/>', {
-        'class': 'div-opt-container'
-    }).appendTo('#build-sign-div');
-
-    //Button build signed
-    $('<div/>', {
-        'class': 'pluginDivChidren',
-        html: 'Build'
-    }).appendTo('#build-sign-div .div-opt-container')
-    .click(() => {
+    //event handler
+    nojq.evhl('#build-sign-button', 'click', () => {
         //get path input
         var ph = $('#build-sign-Kstore-path-inp').val();
 
@@ -1868,7 +1722,10 @@ bld.page = () => {
         //exec
         var newChProc_Build = execFile;
 
-        newChProc_Build('cordova.cmd', ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`], {cwd:curWDir}, (error, stderr, stdout) => {
+        newChProc_Build('cordova.cmd',
+            ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`],
+            {cwd:curWDir},
+            (error, stderr, stdout) => {
 
             console.log(error);
             console.log(stdout);
@@ -1876,7 +1733,46 @@ bld.page = () => {
 
         });
     });
-    //Build signed end
+
+    //fill the existingK div
+    fse.readJson('./user/keys/allkeys.json', (e, exK) => {
+        if (e) {console.log(e);}
+        else {
+            $.each(exK, (k, v) => {
+                console.log(k);
+                //create div for each stored key
+                nojq.ce('div',
+                    '#build-sign-existingK-div',
+                    k,
+                    'pluginDiv-child',
+                    'projects-page-base-div',
+                    k,
+                    'click', 
+                    () => {
+                    //set path input
+                    $('#build-sign-Kstore-path-inp').val(`${v.Path}\\${k}`)
+
+
+                    //set keystore password
+                    $('#build-sign-KS-pass-input').val(`${v.Password}`);
+
+                    //set alias input
+                    $('#build-sign-Kalias-input').val(`${v.Alias}`);
+
+                    //set key pass
+                    $('#build-sign-K-pass-input').val(`${v.PasswordKey}`);
+                });
+
+                //append path
+                nojq.ce('div',
+                    `#${k}`,
+                    `${k}-opt`,
+                    'div-opt-container',
+                    'orange',
+                    `${v.Path}`);
+            });
+        }
+    });
 
     /**
     *Sign with java Keytool
@@ -2164,78 +2060,10 @@ var noFrame = {};
 //and here we go
         //TODO: put click handler to div instead of svg
 //sets divs for the buttons
-noFrame.buttons = () => {
 
-    //sets a div to contain buttons
-    $('<div/>', {
-        id: 'window-option-container'
-    }).appendTo('app');
-
-    $('<div/>', {id: 'online-status'}).appendTo('app');
-
-    //sets a div for each button
-    noFrame.buttonDivs = ['miniM', 'fullS', 'closeW'];
-
-    //I like $.each maybe I'm wrong
-    $.each(noFrame.buttonDivs, (i, v) => {
-        $('<div/>', {
-            id: v,
-            'class': 'window-buttons',
-        }).appendTo('#window-option-container');
-    });
-
-    //call buttons
-    noFrame.svgs();
-};
 
 //append svg's to previously created divs
-noFrame.svgs = () => {
 
-    //minimize
-    $(`
-        <svg class="svg-window-buttons" viewBox="0 0 100 100" width="15" height="15" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <line id="mini-line" x1="15" y1="80" x2="85" y2="80" stroke-width="20" stroke="black" />
-        </svg>
-
-        `).appendTo('#miniM').click(() => {
-            curWin.minimize();
-        });
-
-    //fullscreen 
-    $(`
-        <svg class="svg-window-buttons" viewBox="0 0 100 100" width="15" height="15" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <line id="fulls-line" x1="15" y1="20" x2="85" y2="20" stroke-width="20" stroke="black" />
-            <path id="fulls-path" d="M 15 10 L 15 90 H 85 V 10" stroke="black" stroke-width="5" fill="none"/>
-        </svg>
-
-        `).appendTo('#fullS').click(() => {
-
-            //another data attr for the header to check if window is maximised
-            var dataMax = $('header').attr('data-max');
-
-            if (dataMax == 0) {
-                curWin.maximize();
-                $('header').attr('data-max', 1);
-            }
-            else {
-                curWin.restore();
-                $('header').attr('data-max', 0);
-            }
-        });
-
-    //close
-    $(`
-        <svg class="svg-window-buttons" viewBox="0 0 100 100" width="15" height="15" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <line id="close-line" x1="15" y1="80" x2="85" y2="15" stroke-width="20" stroke="black" />
-            <line id="close-line2" x1="15" y1="15" x2="85" y2="80" stroke-width="20" stroke="black" />
-        </svg>
-
-        `).appendTo('#closeW').click(() => {
-            curWin.close();
-        });
-};
-
-noFrame.buttons();
 
 /**
 Markdown handler for docs and readme.md's
@@ -2339,52 +2167,7 @@ setInterval(() => {
     //console.log('setInt');
 }, 2000);
 
-/**
-*   Slowly but surely removing jquery by little functions here
-*   We will use very short names hope you've got a good editor...
-*/
 
-/**
-  * The object containing all 'remove jQuery' functions
-  *
-  * @type       {object}
-  */
-var nojq = {};
-
-/**
- * Fill Content function = fc Didn't say it would be easy !!
- *
- * @param      {string}  el      The element to fill !css
- * @param      {string}  html    The html
- * @param      {function}  cb    A function in case you need do something after html things
- */
-nojq.fc = (el, html, cb) => {
-    //Get element
-    var cont = document.querySelector(el);
-
-    //fill element
-    cont.innerHTML = html;
-
-    //cb
-    if (cb) {
-        cb();
-    }
-};
-
-/**
- * Shorcut for event handlers just in case
- *
- * @param      String  elementId  The element identifier
- * @param      String  evt        The event
- * @param      Function  handler    The handler
- */
-nojq.evcl = (elementId, evt, handler) => {
-    if(elementId) {
-        //get elem and set handler in one phrase
-        document.getElementById(elementId).addEventListener(evt, handler);
-    }
-};
-//nojq end
 
 /**
  * Former app.js with declarations of node_modules with their parameters when needed
@@ -2467,8 +2250,6 @@ const Config = require('cordova-config');
     // Write the config file 
         //configXml.writeSync();
 
-//tmpl
-nav();
 
 //First view
 createProj.drop();

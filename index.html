@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html >
 	<head> 
-		<title>Cordova GUI</title>
+		<title>Cordova GUI</title> 
 		<link rel="stylesheet" href="css/app.css">
 	</head>
 	<body>
@@ -10,6 +10,44 @@
 		<app>
 			<section id="main-content" title=""></section>
 			<div id="messBox" ></div>
+
+			<div id="window-option-container" style="border-bottom: 1px solid rgba(0, 255, 0, 0.8);">
+				<div id="miniM" class="window-buttons">
+        			<svg class="svg-window-buttons" viewBox="0 0 100 100" width="15" height="15" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            			<line id="mini-line" x1="15" y1="80" x2="85" y2="80" stroke-width="20" stroke="black"></line>
+        			</svg>
+
+        		</div>
+        		<div id="fullS" class="window-buttons">
+        			<svg class="svg-window-buttons" viewBox="0 0 100 100" width="15" height="15" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            		<line id="fulls-line" x1="15" y1="20" x2="85" y2="20" stroke-width="20" stroke="black"></line>
+            		<path id="fulls-path" d="M 15 10 L 15 90 H 85 V 10" stroke="black" stroke-width="5" fill="none"></path>
+        			</svg>
+		        </div>
+		        <div id="closeW" class="window-buttons">
+		        	<svg class="svg-window-buttons" viewBox="0 0 100 100" width="15" height="15" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		            	<line id="close-line" x1="15" y1="80" x2="85" y2="15" stroke-width="20" stroke="black"></line>
+		            	<line id="close-line2" x1="15" y1="15" x2="85" y2="80" stroke-width="20" stroke="black"></line>
+		        	</svg>
+		        </div>
+		    </div>
+
+		    <nav>
+		    	<section id="ol">
+		    		<div id="projects-page" class="nav-ol-child">Projects</div>
+		    		<div id="create-page" class="nav-ol-child">Create</div>
+		    		<div id="plugins-page" class="nav-ol-child">Plugins</div>
+		    		<div id="core-plugins-page" class="nav-ol-child" style="display: none;">Core plugins</div>
+		    		<div id="thpty-plugins-page" class="nav-ol-child" style="display: none;">3rd Party plugins</div>
+		    		<div id="platforms-page" class="nav-ol-child">Platform</div>
+		    		<div id="configxml-page" class="nav-ol-child">Edit config.xml</div>
+		    		<div id="run-page" class="nav-ol-child">Run</div><div id="build-page" class="nav-ol-child">Build</div>
+		    		<div id="nwjsver">
+						nw.js v<script>document.write(nw.process.versions['nw']);</script><br/>
+					</div>
+		    		<button id="but" value="TestButton">TestButton</button>
+		    	</section>
+		    </nav>
 		</app>
 	  	<script src="lib/jquery.js"></script>
 		<script src="app.js"></script>

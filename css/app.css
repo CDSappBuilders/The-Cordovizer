@@ -341,7 +341,7 @@ textarea {
 }
 
 #window-option-container {
-    width: 106px;
+    width: 115px;
     position: relative;
     top: -6.5vh;
     left: 85vw;
@@ -355,6 +355,10 @@ textarea {
     border: 0px solid black;
     -webkit-app-region: no-drag;
     padding-top: 2vh;
+}
+
+.window-buttons:hover {
+    background: rgba(54, 54, 54, 0.659);
 }
 
 #toggle-remote-button {
@@ -393,6 +397,7 @@ textarea {
 .svg-window-buttons {
     border: 0px solid black;
     border-radius: 4px;
+    margin-left: 4px;
 }
 
 
