@@ -1,10 +1,6 @@
 /*jshint  esnext: true, node: true, jquery: true, devel: true */
 /*globals nw, exec, path, progrSs, fse, xmlParser, marked */
 
-
- 
-
-
 //Get main window object
 var curWin = nw.Window.get();
 
@@ -31,7 +27,6 @@ var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line
   *
   * @type       {object}
   */
-
 var nojq = {
 /**
  * Fill Content function = fc Didn't say it would be easy !!
@@ -66,8 +61,19 @@ var nojq = {
             document.querySelector(elementId).addEventListener(evt, handler);
         }
     },
-//create elem 
-//TODO: have to end this
+
+/**
+ * { function_description }
+ *
+ * @param      string       el           The element to create
+ * @param      string       appendIn     The element to append in
+ * @param      string       setId        The setting element ID
+ * @param      string       setClass     The setting of class
+ * @param      string       setClass2    The setting of a second class
+ * @param      string       content      The content of the new element
+ * @param      string       event        The event to listen
+ * @param      function     eventHandle  The event handler
+ */
     ce : (el, appendIn, setId, setClass, setClass2, content, event, eventHandle) => {
         //element to create
         var elem = document.createElement(el);
@@ -1738,8 +1744,17 @@ bld.page = () => {
     fse.readJson('./user/keys/allkeys.json', (e, exK) => {
         if (e) {console.log(e);}
         else {
-            $.each(exK, (k, v) => {
-                console.log(k);
+
+            /** Example
+             *  let myObject = {first: "one"};
+             *$.each(exK, (k, v) =>
+             *  for(let [k, v] of Object.entries(exK)) {
+             *  console.log(key, value); // "first", "one"
+             *  }
+             */
+
+             for(let [k, v] of Object.entries(exK)) {
+                console.log(k, v);
                 //create div for each stored key
                 nojq.ce('div',
                     '#build-sign-existingK-div',
@@ -1770,7 +1785,7 @@ bld.page = () => {
                     'div-opt-container',
                     'orange',
                     `${v.Path}`);
-            });
+            }
         }
     });
 
