@@ -120,3 +120,58 @@
 		commit hash: <script>document.write(nw.process.versions['nw-commit-id']);</script><br/>
 	</div>
 
+    <!-- Create key -->
+    <div id="sign-div" class="pluginDiv">Create keystore
+    <div id="sign-div-dname-container" style="border: 1px solid black;">
+        <div id="Name_DN">
+            <label for="Name">Name</label>
+            <input id="Name_DN-input" name="Name" placeholder="Name" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Organization_DN">
+            <label for="Organization">Organization</label>
+            <input id="Organization_DN-input" name="Organization" placeholder="Organization" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Unit_DN">
+            <label for="Unit">Unit</label>
+            <input id="Unit_DN-input" name="Unit" placeholder="Unit" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Town_DN">
+            <label for="Town">Town</label>
+            <input id="Town_DN-input" name="Town" placeholder="Town" value="" style="margin-top: 4px;">
+        </div>
+        <div id="State_DN">
+            <label for="State">State</label>
+            <input id="State_DN-input" name="State" placeholder="State" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Country_DN">
+            <label for="Country">Country</label>
+            <input id="Country_DN-input" name="Country" placeholder="Country" value="" style="margin-top: 4px;">
+        </div>
+    </div>
+    <div id="sign-div-ks-container" style="border: 1px solid black;">
+        <div id="Path">
+            <input id="Path-input" placeholder="Path" value="">
+        </div>
+        <div id="KSname">
+            <input id="KSname-input" placeholder="KSname" value="">
+        </div>
+        <div id="Alias">
+            <input id="Alias-input" placeholder="Alias" value="">
+        </div>
+        <div id="Password">
+            <input id="Password-input" placeholder="Password" value="">
+        </div>
+        <div id="Validity">
+            <input id="Validity-number-input" type="number">
+        </div>
+        <div id="PasswordKey">
+            <input id="PasswordKey-input" placeholder="PasswordKey" value="">
+        </div>
+    </div>
+    <div id="keystore-destination-input-file" title="" type= "file" nwdirectory></div>
+    <div class="div-opt-container">
+        <div id="sign-div-button" class="pluginDivChidren">Create</div>
+    </div>
+    </div>
+
+

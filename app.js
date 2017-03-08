@@ -202,11 +202,11 @@ nojq.evhl('#run-page', 'click', () => { selectOl('#run-page', runProject.page); 
 nojq.evhl('#build-page', 'click', () => { selectOl('#build-page', bld.page); });
 
 //test buttons
-//test evhl
+/**test evhl
 nojq.evhl('#but', 'click', () => {
     var c = Array.from('yepapi');
     console.log(c);
-});
+});*/
 
 /**
  *Navigation
@@ -222,7 +222,7 @@ nojq.evhl('#but', 'click', () => {
  * @param      {Function}  pageFn    The function that displays the correspondant view
  */
 function selectOl(whichOne, pageFn) {
-    //get element for removing
+    /**get element for removing
     var nolc = document.querySelector('.nav-ol-child');
 
     //remove class
@@ -235,7 +235,10 @@ function selectOl(whichOne, pageFn) {
     nolcS.classList.add('nav-ol-selected');
 
     //Display page
-    pageFn();
+    pageFn();*/
+    $('.nav-ol-child').removeClass('nav-ol-selected');
+        $(whichOne).addClass('nav-ol-selected');
+        pageFn();
 }
 
 /**
@@ -244,16 +247,14 @@ function selectOl(whichOne, pageFn) {
  * @type       {Object}     
  */
 var createProj = {};
-//Drag Drop user code folder: this is the first view
-
 /**
  * Function first view: user could drop a folder containing web code
  * or create a hellocordova project to start from scratch
  *
  * 
  */
-createProj.drop = () => {
 
+createProj.drop = () => {
     /**
      * Fill main-content
      */
@@ -395,7 +396,7 @@ createProj.action = () => {
         //check for error
         if (error) {
 
-            messageBox.comeon(error);
+            messageBox.comeon(error, stdout);
 
             progrSs.good(() => {});
 
@@ -420,7 +421,8 @@ createProj.action = () => {
             });
 
             //let the user know that's done
-            messageBox.comeon(`done bebe`);
+            messageBox.comeon(`You successfully created a new Cordova project with name: ${name},<br>
+                located in: ${pth}\\${fold}.<br>Cordova says: ${stdout}.<br>We wish you success with it`);
         }
     });
 };
@@ -831,7 +833,7 @@ pl.addPlug = (val, shPath) => {
     var newChProcAddPlug = execFile;
 
     //exec
-    newChProcAddPlug(`cordova.cmd`, [`plugin`, `add`, `--save`, `${val}`, `--searchpath`, shPath], {
+    newChProcAddPlug(`cordova.cmd`, [`plugin`, `add`, `--save`, val, `--searchpath`, shPath], {
         cwd: curWDir
     }, (error, stdout, stderr) => {
         if (error) {
@@ -840,7 +842,7 @@ pl.addPlug = (val, shPath) => {
                 //
             });
         } else {
-            messageBox.comeon(`${val} added in ${curWDir} and console says :
+            messageBox.comeon(`${val} successfully added in:<br>${curWDir}<br>Cordova said :
                                 ${stdout}
             `);
             progrSs.good(() => {
@@ -867,7 +869,7 @@ pl.removePlug = (val) => {
         if (error) {
             messageBox.comeon(`${val} fail to remove plugin with error: ${error}`);
         } else {
-            messageBox.comeon(`${val} removed from ${curWDir} and console says : ${stdout}`);
+            messageBox.comeon(`${val} removed from:<br>${curWDir}<br>Cordova said: ${stdout}`);
         }
 
         progrSs.good(() => {});
@@ -907,7 +909,9 @@ runProject.page = () => {
 
         //get existing platforms with userProject/platforms/platforms.json and make a div with $.each
         fse.readJson(`${curWDir}\\platforms\\platforms.json`, (err, plats) => {
-            if (err) { messageBox.comeon(err); } else {
+            if (err) {
+                messageBox.comeon(err); 
+            } else {
                 $.each(plats, (platform, version) => {
 
                     //create the div 
@@ -951,14 +955,16 @@ runProject.action = (platform) => {
     //...
     newChProc_Run(`cordova.cmd`, [`run`, `${platform}`], { cwd: curWDir }, (error, stderr, stdout) => {
         if (error) {
-            messageBox.comeon(`Cordova says: ${error}.  This means that you don't fulfill all requirements to run your project for this platform`);
+            messageBox.comeon(`Cordova said: ${error}.<br>This means that you don't fulfill all requirements to run your project for this platform<br>
+                <a target="_blank" href="http://cordova.apache.org/docs/en/latest/">Please see online documentation</a>
+                 or the offline one <span id="messDocPlatLink">here</span>`);
+                nojq.evhl('#messDocPlatLink', 'click', ()=>{
+                    plat.checkPlat();
+                });
             progrSs.good(() => {});
         } else {
             messageBox.comeon(`running and saying: ${stdout}`);
-            progrSs.good(() => {
-
-
-            });
+            progrSs.good(() => {});
         }
     });
 };
@@ -1734,6 +1740,58 @@ bld.page = () => {
             <div class="div-opt-container">
                 <div id="build-sign-button" class="pluginDivChidren">Build</div>
             </div>
+        </div>
+        <!-- Create key -->
+    <div id="sign-div" class="pluginDiv">Create keystore
+    <div id="sign-div-dname-container" style="border: 1px solid black;">
+        <div id="Name_DN">
+            <label for="Name">Name</label>
+            <input id="Name_DN-input" name="Name" placeholder="Name" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Organization_DN">
+            <label for="Organization">Organization</label>
+            <input id="Organization_DN-input" name="Organization" placeholder="Organization" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Unit_DN">
+            <label for="Unit">Unit</label>
+            <input id="Unit_DN-input" name="Unit" placeholder="Unit" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Town_DN">
+            <label for="Town">Town</label>
+            <input id="Town_DN-input" name="Town" placeholder="Town" value="" style="margin-top: 4px;">
+        </div>
+        <div id="State_DN">
+            <label for="State">State</label>
+            <input id="State_DN-input" name="State" placeholder="State" value="" style="margin-top: 4px;">
+        </div>
+        <div id="Country_DN">
+            <label for="Country">Country</label>
+            <input id="Country_DN-input" name="Country" placeholder="Country" value="" style="margin-top: 4px;">
+        </div>
+    </div>
+    <div id="sign-div-ks-container" style="border: 1px solid black;">
+        <div id="Path">
+            <input id="Path-input" placeholder="Path" value="">
+        </div>
+        <div id="KSname">
+            <input id="KSname-input" placeholder="KSname" value="">
+        </div>
+        <div id="Alias">
+            <input id="Alias-input" placeholder="Alias" value="">
+        </div>
+        <div id="Password">
+            <input id="Password-input" placeholder="Password" value="">
+        </div>
+        <div id="Validity">
+            <input id="Validity-number-input" type="number" placeholder="Validity" >
+        </div>
+        <div id="PasswordKey">
+            <input id="PasswordKey-input" placeholder="PasswordKey" value="">
+        </div>
+    </div>
+    <div id="keystore-destination-input-file" title="" type= "file" nwdirectory></div> <div class="div-opt-container">
+        <div id="sign-div-button" class="pluginDivChidren">Create</div>
+    </div>
     </div>`);
 
     /**
@@ -1801,7 +1859,9 @@ bld.page = () => {
         });
     });
 
-    //fill the existingK div
+    /**
+     * Keys created before
+     */
     fse.readJson('./user/keys/allkeys.json', (e, exK) => {
         if (e) { console.log(e); } else {
 
@@ -1851,20 +1911,20 @@ bld.page = () => {
      */
     //data in ./user/keys/lastkey.json
 
-    //Create keystore div
+    /**Create keystore div
     $('<div/>', {
         id: 'sign-div',
         'class': 'pluginDiv',
         html: 'Create keystore'
-    }).appendTo('#main-content');
+    }).appendTo('#main-content');*/
 
     //Dname div
-    $('<div/>', {
+    /**$('<div/>', {
         id: 'sign-div-dname-container',
         css: {
             border: '1px solid black'
         }
-    }).appendTo('#sign-div');
+    }).appendTo('#sign-div');*/
 
     //Fill it with inputs
     //get data
@@ -1876,17 +1936,21 @@ bld.page = () => {
             for (let [k, v] of Object.entries(kjs.dname)) {
                 //console.log(k, v)
                     //sets div with label and input
-                $('<div/>', {
+                /**$('<div/>', {
                     id: `${k}_DN`
-                }).appendTo('#sign-div-dname-container');
+                }).appendTo('#sign-div-dname-container');*/
 
-                $('<label/>', {
+                /**$('<label/>', {
                     'for': k,
                     html: k
-                }).appendTo(`#${k}_DN`);
-
-                $('<input>', {
-                        id: `${k}_DN-input`,
+                }).appendTo(`#${k}_DN`);*/
+                nojq.v(`#${k}_DN-input`, v);
+                nojq.evhl(`#${k}_DN-input`, 'change', ()=>{
+                    kjs.dname[k] = nojq.v(`#${k}_DN-input`);
+                    fse.writeJson('./user/keys/lastkey.json', kjs);
+                });
+                /**$('<input>', {
+                        id: ,
                         name: k,
                         placeholder: k,
                         value: v,
@@ -1895,66 +1959,63 @@ bld.page = () => {
                         }
                     }).appendTo(`#${k}_DN`)
                     .change(() => {
-                        kjs.dname[k] = $(`#${k}_DN-input`).val();
+                        
 
                         //test write file
-                        fse.writeJson('./user/keys/lastkey.json', kjs);
-                    });
+                        
+                    });*/
             } //);
 
-            //get dname values into variables to make them optional
-            var cn  = $('#Name_DN-input').val(),
-                o   = $('#Organization_DN-input').val(),
-                ou  = $('#Unit_DN-input').val(),
-                l   = $('#Town_DN-input').val(),
-                c   = $('#Country_DN-input').val(),
-                s   = $('#State_DN-input').val();
-
-            //Make this a unique string
-            var DName = `cn=${cn}, o=${o}, ou=${ou}, l=${l}, s=${s}, c=${c}`;
-
             //container for others
-            $('<div/>', {
+           /** $('<div/>', {
                 id: 'sign-div-ks-container',
                 css: {
                     border: '1px solid black'
                 }
-            }).appendTo('#sign-div');
+            }).appendTo('#sign-div');*/
 
             //handle others
             for (let [k, v] of Object.entries(kjs)) {
                 //exit dname
-                if (k != 'dname') {
+                if (k !== 'dname') {
 
                     //Container for inputs below
-                    $('<div/>', {
+                    /**$('<div/>', {
                         id: k
-                    }).appendTo('#sign-div-ks-container');
+                    }).appendTo('#sign-div-ks-container');*/
 
                     //inputs
-                    $('<input>', {
-                            id: `${k}-input`,
+                    nojq.v(`#${k}-input`, v);
+                    if (k !== 'Path') {
+                        nojq.evhl(`#${k}-input`, 'change', ()=>{
+                        kjs[k] = nojq.v(`#${k}-input`);
+                        console.log('build input changed')
+                        //write file
+                        fse.writeJson('./user/keys/lastkey.json', kjs);
+                        });
+                    }
+                    /**$('<input>', {
+                            id: ,
                             placeholder: k,
                             value: v
                         }).appendTo(`#sign-div-ks-container #${k}`)
                         .change(() => {
-                            kjs[k] = $(`#${k}-input`).val();
-
-                            //write file
-                            fse.writeJson('./user/keys/lastkey.json', kjs);
-                        });
+                           
+                        });*/
                 }
             }
 
             //customize inputs
             //Path
             //open file input (temporary before adding button)
-            $('#Path-input').click(() => {
+            /**$().click(() => {
+                
+            });*/
+            nojq.evhl('#Path-input', 'click', ()=>{
                 $('#keystore-destination-input-file').click();
             });
-
             //sets hidden input file
-            $('<input>', {
+            /**$('<input>', {
                     id: 'keystore-destination-input-file',
                     title: ' ',
                     type: 'file',
@@ -1969,12 +2030,12 @@ bld.page = () => {
 
                     //write file
                     fse.writeJson('./user/keys/lastkey.json', kjs);
-                });
+                });*/
 
             //validity input
-            $('#Validity-input').remove();
+            //$('#Validity-input').remove();
 
-            $('<input>', {
+            /**$('<input>', {
                     id: 'Validity-number-input',
                     type: 'number'
                 }).appendTo('#Validity').val(kjs.Validity)
@@ -1983,13 +2044,23 @@ bld.page = () => {
 
                     //write file
                     fse.writeJson('./user/keys/lastkey.json', kjs);
-                });
+                });*/
 
             //the usual option container
             $('<div/>', {
                 'class': 'div-opt-container'
             }).appendTo('#sign-div');
 
+            //get dname values into variables to make them optional
+            var cn  = $('#Name_DN-input').val(),
+                o   = $('#Organization_DN-input').val(),
+                ou  = $('#Unit_DN-input').val(),
+                l   = $('#Town_DN-input').val(),
+                c   = $('#Country_DN-input').val(),
+                s   = $('#State_DN-input').val();
+
+            //Make this a unique string
+            var DName = `cn=${cn}, o=${o}, ou=${ou}, l=${l}, s=${s}, c=${c}`;
             //Button sign
             $('<div/>', {
                     id: 'sign-div-button',
