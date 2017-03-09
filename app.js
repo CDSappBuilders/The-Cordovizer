@@ -1729,9 +1729,14 @@ bld.page = () => {
         </div>
         <!-- Build signed div -->
         <div id="build-sign-div" class="pluginDiv">Build signed
-            <div id="build-sign-existingK-div"></div>
+            <div id="build-sign-existingK-div">
+                <div class="pluginDiv-child" style="text-align: center;">Cordovized keystores</div>
+            </div>
             <div id="build-sign-inputs-div">
-                <input id="build-sign-Kstore-path-inp-file" type="file" nwdirectory="" require="true">
+                <input id="build-sign-Kstore-path-inp-file" type="file" accept=".keystore,.jks,.p12,.p10" require="true">
+                <div class="div-opt-container">
+                    <div id="build-sign-browseK" class="pluginDivChidren">Browse to keystore</div>
+                </div>
                 <input id="build-sign-Kstore-path-inp" placeholder="Path to existing keystore" require="true">
                 <input id="build-sign-KS-pass-input" placeholder="Keystore password">
                 <input id="build-sign-Kalias-input" placeholder="Alias">
@@ -1758,9 +1763,11 @@ bld.page = () => {
         newChProc_Build_uns_deb('cordova.cmd', ['build', 'android', '--debug'], { cwd: curWDir },
             (error, stderr, stdout) => {
 
-                console.log(error);
-                console.log(stdout);
-                console.log(stderr);
+                if (error) {
+                    messageBox.comeon(error, stderr);
+                } else {
+                    messageBox.comeon(stdout);
+                }
 
         });
     });
@@ -1776,12 +1783,22 @@ bld.page = () => {
         newChProc_Build_uns_rel('cordova.cmd', ['build', 'android', '--release'], { cwd: curWDir },
             (error, stderr, stdout) => {
 
-                console.log(error);
-                console.log(stdout);
-                console.log(stderr);
+                if (error) {
+                    messageBox.comeon(error, stderr);
+                } else {
+                    messageBox.comeon(stdout);
+                }
 
         });
     });
+
+    /**
+     * Browse for key === trigger input file
+     * Don't know for now how to do it
+     */
+     nojq.evhl('#build-sign-browseK', 'click', ()=>{
+        $('#build-sign-Kstore-path-inp-file').click();
+     });
 
     /**
      *Build signed //validation required here as in other forms //to check
@@ -1805,11 +1822,20 @@ bld.page = () => {
         newChProc_Build('cordova.cmd', ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`], { cwd: curWDir },
             (error, stderr, stdout) => {
 
-                console.log(error);
-                console.log(stdout);
-                console.log(stderr);
+                if (error) {
+                    messageBox.comeon(error, stderr);
+                } else {
+                    messageBox.comeon(stdout);
+                }
+                
 
         });
+    });
+
+    nojq.evhl('#build-sign-Kstore-path-inp-file', 'change', ()=>{
+        //var parPth = path.parse(nojq.v('#build-sign-Kstore-path-inp-file'));
+        //console.log(parPth);
+        nojq.v('#build-sign-Kstore-path-inp', nojq.v('#build-sign-Kstore-path-inp-file'));
     });
 
     /**
@@ -1828,7 +1854,7 @@ bld.page = () => {
                     'click',
                     () => {
                         //set path input
-                        nojq.v('#build-sign-Kstore-path-inp', `${v.Path}\\${k}`);
+                        nojq.v('#build-sign-Kstore-path-inp', `${v.Path}\\${k}.keystore`);
                         
                         //set keystore password
                         nojq.v('#build-sign-KS-pass-input', `${v.Password}`);
@@ -1878,7 +1904,7 @@ bld.page = () => {
         } else {
             //handle dname 
             for (let [k, v] of Object.entries(kjs.dname)) {
-                console.log(k, v)
+                //console.log(k, v)
                     //sets div with label and input
                 $('<div/>', {
                     id: `${k}_DN`

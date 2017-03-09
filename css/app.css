@@ -150,7 +150,7 @@ nav {
     margin: 4px 4px 0px 4px!important;
 }
 
-#user-project-destination-input-file, #keystore-destination-input-file {
+#user-project-destination-input-file, #keystore-destination-input-file, #build-sign-Kstore-path-inp-file {
     border: 1px solid black;
     position: fixed;
     top: 80vh;
