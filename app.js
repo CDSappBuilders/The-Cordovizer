@@ -15,7 +15,7 @@ curWin.on('loaded', () => {
 /**
  * Globals
  */
-var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line;
+var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line, cordoExe, keytExe, editExe;
 
 /**
  * Slowly but surely removing jquery by little functions here      ///////////////////////////////
@@ -162,6 +162,7 @@ var nojq = {
 /**
  *Setting main content event handlers
  */
+
 
 //Minimize button
 nojq.evhl('#miniM', 'click', () => { curWin.minimize(); });
@@ -963,7 +964,7 @@ runProject.action = (platform) => {
                 });
             progrSs.good(() => {});
         } else {
-            messageBox.comeon(`running and saying: ${stdout}`);
+            messageBox.comeon(`Running ${stdout}`);
             progrSs.good(() => {});
         }
     });
@@ -1125,10 +1126,10 @@ runProject.appendNewButton = (platform) => {
         //go for new running
         newChProc_RunAgain(`cordova.cmd`, [`run`, `${platform}`], { cwd: curWDir }, (error, stderr, stdout) => {
             if (error) {
-                messageBox.comeon(`Cordova says: ${error}.  This means that you don't fulfill all requirements to run your project for this platform`);
+                messageBox.comeon(`Cordova said: ${error}.  This means that you don't fulfill all requirements to run your project for this platform`);
                 progrSs.good(() => {});
             } else {
-                messageBox.comeon(`running and saying: ${stdout}`);
+                messageBox.comeon(`Running ${stdout}`);
                 progrSs.good(() => {});
             }
         });
@@ -1673,7 +1674,7 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
 
 
                 configXml.write(() => {
-                    messageBox.comeon('ok cliked');
+                    messageBox.comeon('You successfully edited your Cordova project config.xml file');
                     //create config.json in order to work with config.wml
                     //this function is in app.js, has said before..
                     xml(`${curWDir}\\config.xml`, `${curWDir}\\config.json`);
@@ -1734,7 +1735,7 @@ bld.page = () => {
             </div>
             <div id="build-sign-inputs-div">
                 <input id="build-sign-Kstore-path-inp-file" type="file" accept=".keystore,.jks,.p12,.p10" require="true">
-                <div class="div-opt-container">
+                <div class="div-opt-container" style="margin-top: 2px;">
                     <div id="build-sign-browseK" class="pluginDivChidren">Browse to keystore</div>
                 </div>
                 <input id="build-sign-Kstore-path-inp" placeholder="Path to existing keystore" require="true">
@@ -1756,40 +1757,48 @@ bld.page = () => {
      * and make a function with it for all builds
      */
     nojq.evhl('#build-unsign-deb', 'click', () =>{ 
-        //get the process
-        var newChProc_Build_uns_deb = execFile;
+        progrSs.strt();
+        setTimeout(()=>{
+            //get the process
+            var newChProc_Build_uns_deb = execFile;
 
-        //and do it
-        newChProc_Build_uns_deb('cordova.cmd', ['build', 'android', '--debug'], { cwd: curWDir },
-            (error, stderr, stdout) => {
+            //and do it
+            newChProc_Build_uns_deb('cordova.cmd', ['build', 'android', '--debug'], { cwd: curWDir },
+                (error, stderr, stdout) => {
 
-                if (error) {
-                    messageBox.comeon(error, stderr);
-                } else {
-                    messageBox.comeon(stdout);
-                }
+                    if (error) {
+                        messageBox.comeon(error, stderr);
+                    } else {
+                        messageBox.comeon(stderr);
+                    }
 
-        });
+            });
+        }, 1000);
     });
 
     /**
      * build release unsigned //TODO: not tested yet
      */
     nojq.evhl('#build-unsign-rel', 'click', () =>{ 
-        //get the process
-        var newChProc_Build_uns_rel = execFile;
+        progrSs.strt();
+        setTimeout(()=>{
+            //get the process
+            var newChProc_Build_uns_rel = execFile;
 
-        //and do it
-        newChProc_Build_uns_rel('cordova.cmd', ['build', 'android', '--release'], { cwd: curWDir },
-            (error, stderr, stdout) => {
+            //and do it
+            newChProc_Build_uns_rel('cordova.cmd', ['build', 'android', '--release'], { cwd: curWDir },
+                (error, stderr, stdout) => {
 
-                if (error) {
-                    messageBox.comeon(error, stderr);
-                } else {
-                    messageBox.comeon(stdout);
-                }
+                    if (error) {
+                        messageBox.comeon(error, stderr);
+                    } else {
+                        progrSs.good(()=>{
+                            messageBox.comeon(stderr);
+                        });
+                    }
 
-        });
+            });
+            }, 1000);
     });
 
     /**
@@ -1805,31 +1814,34 @@ bld.page = () => {
      */
     //event handler
     nojq.evhl('#build-sign-button', 'click', () => {
-        //get path input
-        var ph = nojq.v('#build-sign-Kstore-path-inp');
+        setTimeout(()=>{
+                //get path input
+            var ph = nojq.v('#build-sign-Kstore-path-inp');
 
-        //get keystore password
-        var ksp = nojq.v('#build-sign-KS-pass-input');
+            //get keystore password
+            var ksp = nojq.v('#build-sign-KS-pass-input');
 
-        //get alias input
-        var al = nojq.v('#build-sign-Kalias-input');
+            //get alias input
+            var al = nojq.v('#build-sign-Kalias-input');
 
-        //get key pass
-        var kp = nojq.v('#build-sign-K-pass-input');
-        //exec
-        var newChProc_Build = execFile;
-
-        newChProc_Build('cordova.cmd', ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`], { cwd: curWDir },
-            (error, stderr, stdout) => {
-
-                if (error) {
-                    messageBox.comeon(error, stderr);
-                } else {
-                    messageBox.comeon(stdout);
-                }
+            //get key pass
+            var kp = nojq.v('#build-sign-K-pass-input');
+            //exec
+            var newChProc_Build = execFile;
+            //if (true) {} else {}
+            newChProc_Build('cordova.cmd', ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`], { cwd: curWDir },
+                (error, stderr, stdout) => {
                 
-
-        });
+                    if (error) {
+                        messageBox.comeon(error, stderr);
+                    } else {
+                        progrSs.good(()=>{
+                            messageBox.comeon(stderr);
+                        });
+                    }
+            });
+        }, 1000);
+        progrSs.strt();
     });
 
     nojq.evhl('#build-sign-Kstore-path-inp-file', 'change', ()=>{
@@ -2017,7 +2029,8 @@ bld.page = () => {
 
             $('<input>', {
                     id: 'Validity-number-input',
-                    type: 'number'
+                    type: 'number',
+                    placeholder: 'Validity'
                 }).appendTo('#Validity').val(kjs.Validity)
                 .change(() => {
                     kjs.Validity = $('#Validity-number-input').val();
@@ -2051,10 +2064,10 @@ bld.page = () => {
                         //execFile
                         var newChProc_Key = execFile;
 
-                        //and do it...\keytool.exe
+                        //and do it...\keytool.exe C:\\Program Files\\Android\\Android Studio\\jre\\jre\\bin\\
                         //TODO: make this an input to choose or a research with fse and get the good path here 
                         //because environement variable path is tricky with keytool, in my config at least
-                        newChProc_Key(`C:\\Program Files\\Android\\Android Studio\\jre\\jre\\bin\\keytool.exe`, ['-genkeypair', '-dname', DName, '-keystore', PathKs, '-alias', $('#Alias-input').val(), '-storepass', $('#Password-input').val(), '-keypass', $('#PasswordKey-input').val(), '-validity', $('#Validity-number-input').val()], (error, stdout, stderr) => {
+                        newChProc_Key(`keytool.exe`, ['-genkeypair', '-dname', DName, '-keystore', PathKs, '-alias', $('#Alias-input').val(), '-storepass', $('#Password-input').val(), '-keypass', $('#PasswordKey-input').val(), '-validity', $('#Validity-number-input').val()], (error, stdout, stderr) => {
                             if (error) {
                                 console.log(error);
                                 console.log(stderr);
@@ -2142,11 +2155,11 @@ messageBox.comeon = (message) => {
                 <html>
                     <head>
                         <title>Message</title>
-                    <link rel="stylesheet" href="app.css">
+                    <link rel="stylesheet" href="css/app.css">
                     <body class="messBox_text" >
                         ${message}
                         <script src="jquery.js"></script>
-                        <script src="./new_window_open/messWin.js"></script>
+                        <script src="new_window_open/messWin.js"></script>
                     </body>
                 </html>`, 'utf-8', () => {
 
@@ -2283,6 +2296,91 @@ setInterval(() => {
     onl.check();
     //console.log('setInt');
 }, 2000);
+
+/**
+ * Function to set path to executables:
+ *      for now : cordova.cmd
+ *                keytool.exe
+ *                editor if it works
+ *
+ * @type       object
+ */
+var env = {
+    /**
+     * The form for env variables
+     *
+     */
+    page : ()=>{
+        /**
+         * Fill content
+         */
+        nojq.fc('#main-content', `
+                <div id="env">
+                    
+                    <div id="cordova-env"><input id="c-env-path-inp-file" type="file">
+                        <label for="cordova-env">cordova.cmd</label><br>
+                        <input id="c-env" name="cordova-env" placeholder="Path to executable" value="" style="margin-top: 4px; width:70%;" >
+                        <div class="pluginDivChidren" id="browse-c-env">Browse</div>
+                    </div>
+                    <div id="keytool-env"><input id="k-env-path-inp-file" type="file">
+                        <label for="keytool-env">keytool.exe</label><br>
+                        <input id="k-env" name="keytool-env" placeholder="Path to executable" value="" style="margin-top: 4px; width:70%;">
+                        <div class="pluginDivChidren" id="browse-k-env">Browse</div>
+                    </div>
+                    <div id="editor-env"><input id="e-env-path-inp-file" type="file">
+                        <label for="editor-env">Your editor executable</label><br>
+                        <input id="e-env" name="editor-env" placeholder="Path to executable" value="" style="margin-top: 4px; width:70%;">
+                        <div class="pluginDivChidren" id="browse-e-env">Browse</div>
+                    </div>
+                </div>
+            `);
+        /**
+         * click event for cordova env
+         */
+        nojq.evhl('#browse-c-env', 'click', ()=>{
+            //open file input
+            $('#c-env-path-inp-file').click();
+
+            //get the change to fill input
+            nojq.evhl('#c-env-path-inp-file', 'change', ()=>{
+                nojq.v('#c-env', nojq.v('#c-env-path-inp-file'));
+                cordoExe = nojq.v('#c-env-path-inp-file');
+            });
+        });
+
+        /**
+         * click event for keytool env
+         */
+        nojq.evhl('#browse-k-env', 'click', ()=>{
+            //open file input
+            $('#k-env-path-inp-file').click();
+
+            //get the change to fill input
+            nojq.evhl('#k-env-path-inp-file', 'change', ()=>{
+                nojq.v('#k-env', nojq.v('#k-env-path-inp-file'));
+                keytExe = nojq.v('#k-env-path-inp-file');
+            });
+        });
+
+        /**
+         * click event for editor env
+         */
+        nojq.evhl('#browse-e-env', 'click', ()=>{
+            //open file input
+            $('#e-env-path-inp-file').click();
+
+            //get the change to fill input
+            nojq.evhl('#e-env-path-inp-file', 'change', ()=>{
+                nojq.v('#e-env', nojq.v('#e-env-path-inp-file'));
+                editExe = nojq.v('#e-env-path-inp-file');
+            });
+        });
+    }//end of page
+};
+//ico div for settings, only env variable pathes
+nojq.evhl('#ico', 'click', ()=>{
+    env.page();
+});
 
 
 

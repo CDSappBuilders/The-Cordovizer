@@ -150,7 +150,7 @@ nav {
     margin: 4px 4px 0px 4px!important;
 }
 
-#user-project-destination-input-file, #keystore-destination-input-file, #build-sign-Kstore-path-inp-file {
+#user-project-destination-input-file, #keystore-destination-input-file, #build-sign-Kstore-path-inp-file, #c-env-path-inp-file, #k-env-path-inp-file, #e-env-path-inp-file {
     border: 1px solid black;
     position: fixed;
     top: 80vh;
@@ -398,6 +398,7 @@ textarea {
     position: fixed;
     top: 5px;
     left: 15px;
+    -webkit-app-region: no-drag;
 }
 
 /**style for SVG*/
