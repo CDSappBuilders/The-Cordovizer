@@ -74,7 +74,7 @@ var nojq = {
      * @param      string       event        The event to listen
      * @param      function     eventHandle  The event handler
      */
-    ce: (el, appendIn, setId = '', setClass = [''], content, event, eventHandle) => {
+    ce: (el = '', appendIn = '', setId = '', setClass = [''], content = '', event = '', eventHandle) => {
         //element to create
         var elem = document.createElement(el);
 
@@ -125,7 +125,7 @@ var nojq = {
      * @param      string  val     The value to set if provided, to get if not
      * @return     string  value   The value of selected element
      */
-    v: (el, val) => { //TODO: not working
+    v: (el, val) => {
         //get elem
         var elem = document.querySelector(el);
         
@@ -1741,61 +1741,14 @@ bld.page = () => {
                 <div id="build-sign-button" class="pluginDivChidren">Build</div>
             </div>
         </div>
-        <!-- Create key -->
-    <div id="sign-div" class="pluginDiv">Create keystore
-    <div id="sign-div-dname-container" style="border: 1px solid black;">
-        <div id="Name_DN">
-            <label for="Name">Name</label>
-            <input id="Name_DN-input" name="Name" placeholder="Name" value="" style="margin-top: 4px;">
+        <div id="sign-div" class="pluginDiv">Create keystore
+            <div id="sign-div-dname-container" style="border: 1px solid black;"></div>
         </div>
-        <div id="Organization_DN">
-            <label for="Organization">Organization</label>
-            <input id="Organization_DN-input" name="Organization" placeholder="Organization" value="" style="margin-top: 4px;">
-        </div>
-        <div id="Unit_DN">
-            <label for="Unit">Unit</label>
-            <input id="Unit_DN-input" name="Unit" placeholder="Unit" value="" style="margin-top: 4px;">
-        </div>
-        <div id="Town_DN">
-            <label for="Town">Town</label>
-            <input id="Town_DN-input" name="Town" placeholder="Town" value="" style="margin-top: 4px;">
-        </div>
-        <div id="State_DN">
-            <label for="State">State</label>
-            <input id="State_DN-input" name="State" placeholder="State" value="" style="margin-top: 4px;">
-        </div>
-        <div id="Country_DN">
-            <label for="Country">Country</label>
-            <input id="Country_DN-input" name="Country" placeholder="Country" value="" style="margin-top: 4px;">
-        </div>
-    </div>
-    <div id="sign-div-ks-container" style="border: 1px solid black;">
-        <div id="Path">
-            <input id="Path-input" placeholder="Path" value="">
-        </div>
-        <div id="KSname">
-            <input id="KSname-input" placeholder="KSname" value="">
-        </div>
-        <div id="Alias">
-            <input id="Alias-input" placeholder="Alias" value="">
-        </div>
-        <div id="Password">
-            <input id="Password-input" placeholder="Password" value="">
-        </div>
-        <div id="Validity">
-            <input id="Validity-number-input" type="number" placeholder="Validity" >
-        </div>
-        <div id="PasswordKey">
-            <input id="PasswordKey-input" placeholder="PasswordKey" value="">
-        </div>
-    </div>
-    <div id="keystore-destination-input-file" title="" type= "file" nwdirectory></div> <div class="div-opt-container">
-        <div id="sign-div-button" class="pluginDivChidren">Create</div>
-    </div>
-    </div>`);
+        `);
 
     /**
-     * Build debug unsigned project //TODO: not tested yet and make a function with it for all builds
+     * Build debug unsigned project //TODO: not tested yet 
+     * and make a function with it for all builds
      */
     nojq.evhl('#build-unsign-deb', 'click', () =>{ 
         //get the process
@@ -1865,14 +1818,6 @@ bld.page = () => {
     fse.readJson('./user/keys/allkeys.json', (e, exK) => {
         if (e) { console.log(e); } else {
 
-            /** Example
-             *  let myObject = {first: "one"};
-             *
-             *  for(let [k, v] of Object.entries(exK)) {
-             *  console.log(key, value); // "first", "one"
-             *  }
-             */
-
             for (let [k, v] of Object.entries(exK)) {
                 //console.log(k, v);
                 //create div for each stored key
@@ -1884,8 +1829,7 @@ bld.page = () => {
                     () => {
                         //set path input
                         nojq.v('#build-sign-Kstore-path-inp', `${v.Path}\\${k}`);
-
-
+                        
                         //set keystore password
                         nojq.v('#build-sign-KS-pass-input', `${v.Password}`);
 
@@ -1911,8 +1855,8 @@ bld.page = () => {
      */
     //data in ./user/keys/lastkey.json
 
-    /**Create keystore div
-    $('<div/>', {
+    //Create keystore div
+    /**$('<div/>', {
         id: 'sign-div',
         'class': 'pluginDiv',
         html: 'Create keystore'
@@ -1934,23 +1878,30 @@ bld.page = () => {
         } else {
             //handle dname 
             for (let [k, v] of Object.entries(kjs.dname)) {
-                //console.log(k, v)
+                console.log(k, v)
                     //sets div with label and input
-                /**$('<div/>', {
+                $('<div/>', {
                     id: `${k}_DN`
-                }).appendTo('#sign-div-dname-container');*/
+                }).appendTo('#sign-div-dname-container');
 
-                /**$('<label/>', {
+                /**
+                 * Not working nobody knows why !
+                 * Without jQuery it seems the file stop to be reading at the first value
+                 * maybe because it's empty
+                 
+                nojq.ce('div',
+                    '#sign-div-dname-container',
+                    k,
+                    [''],
+                    k);*/
+
+                $('<label/>', {
                     'for': k,
                     html: k
-                }).appendTo(`#${k}_DN`);*/
-                nojq.v(`#${k}_DN-input`, v);
-                nojq.evhl(`#${k}_DN-input`, 'change', ()=>{
-                    kjs.dname[k] = nojq.v(`#${k}_DN-input`);
-                    fse.writeJson('./user/keys/lastkey.json', kjs);
-                });
-                /**$('<input>', {
-                        id: ,
+                }).appendTo(`#${k}_DN`);
+
+                $('<input>', {
+                        id: `${k}_DN-input`,
                         name: k,
                         placeholder: k,
                         value: v,
@@ -1959,63 +1910,66 @@ bld.page = () => {
                         }
                     }).appendTo(`#${k}_DN`)
                     .change(() => {
-                        
+                        kjs.dname[k] = $(`#${k}_DN-input`).val();
 
                         //test write file
-                        
-                    });*/
+                        fse.writeJson('./user/keys/lastkey.json', kjs);
+                    });
             } //);
 
+            //get dname values into variables to make them optional
+            var cn  = $('#Name_DN-input').val(),
+                o   = $('#Organization_DN-input').val(),
+                ou  = $('#Unit_DN-input').val(),
+                l   = $('#Town_DN-input').val(),
+                c   = $('#Country_DN-input').val(),
+                s   = $('#State_DN-input').val();
+
+            //Make this a unique string
+            var DName = `cn=${cn}, o=${o}, ou=${ou}, l=${l}, s=${s}, c=${c}`;
+
             //container for others
-           /** $('<div/>', {
+            $('<div/>', {
                 id: 'sign-div-ks-container',
                 css: {
                     border: '1px solid black'
                 }
-            }).appendTo('#sign-div');*/
+            }).appendTo('#sign-div');
 
             //handle others
             for (let [k, v] of Object.entries(kjs)) {
                 //exit dname
-                if (k !== 'dname') {
+                if (k != 'dname') {
 
                     //Container for inputs below
-                    /**$('<div/>', {
+                    $('<div/>', {
                         id: k
-                    }).appendTo('#sign-div-ks-container');*/
+                    }).appendTo('#sign-div-ks-container');
 
                     //inputs
-                    nojq.v(`#${k}-input`, v);
-                    if (k !== 'Path') {
-                        nojq.evhl(`#${k}-input`, 'change', ()=>{
-                        kjs[k] = nojq.v(`#${k}-input`);
-                        console.log('build input changed')
-                        //write file
-                        fse.writeJson('./user/keys/lastkey.json', kjs);
-                        });
-                    }
-                    /**$('<input>', {
-                            id: ,
+                    $('<input>', {
+                            id: `${k}-input`,
                             placeholder: k,
                             value: v
                         }).appendTo(`#sign-div-ks-container #${k}`)
                         .change(() => {
-                           
-                        });*/
+                            kjs[k] = $(`#${k}-input`).val();
+
+                            //write file
+                            fse.writeJson('./user/keys/lastkey.json', kjs);
+                        });
                 }
             }
 
             //customize inputs
             //Path
             //open file input (temporary before adding button)
-            /**$().click(() => {
-                
-            });*/
-            nojq.evhl('#Path-input', 'click', ()=>{
+            $('#Path-input').click(() => {
                 $('#keystore-destination-input-file').click();
             });
+
             //sets hidden input file
-            /**$('<input>', {
+            $('<input>', {
                     id: 'keystore-destination-input-file',
                     title: ' ',
                     type: 'file',
@@ -2030,12 +1984,12 @@ bld.page = () => {
 
                     //write file
                     fse.writeJson('./user/keys/lastkey.json', kjs);
-                });*/
+                });
 
             //validity input
-            //$('#Validity-input').remove();
+            $('#Validity-input').remove();
 
-            /**$('<input>', {
+            $('<input>', {
                     id: 'Validity-number-input',
                     type: 'number'
                 }).appendTo('#Validity').val(kjs.Validity)
@@ -2044,23 +1998,13 @@ bld.page = () => {
 
                     //write file
                     fse.writeJson('./user/keys/lastkey.json', kjs);
-                });*/
+                });
 
             //the usual option container
             $('<div/>', {
                 'class': 'div-opt-container'
             }).appendTo('#sign-div');
 
-            //get dname values into variables to make them optional
-            var cn  = $('#Name_DN-input').val(),
-                o   = $('#Organization_DN-input').val(),
-                ou  = $('#Unit_DN-input').val(),
-                l   = $('#Town_DN-input').val(),
-                c   = $('#Country_DN-input').val(),
-                s   = $('#State_DN-input').val();
-
-            //Make this a unique string
-            var DName = `cn=${cn}, o=${o}, ou=${ou}, l=${l}, s=${s}, c=${c}`;
             //Button sign
             $('<div/>', {
                     id: 'sign-div-button',
