@@ -393,6 +393,13 @@ textarea {
     margin-top: 2px;
 }
 
+#ico {
+    width: auto;
+    position: fixed;
+    top: 5px;
+    left: 15px;
+}
+
 /**style for SVG*/
 .svg-window-buttons {
     border: 0px solid black;
