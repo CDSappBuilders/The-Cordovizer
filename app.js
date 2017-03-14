@@ -15,7 +15,7 @@ curWin.on('loaded', () => {
 /**
  * Globals
  */
-var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line, cordoExe, keytExe, editExe;
+var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line;
 
 /**
  * Slowly but surely removing jquery by little functions here      ///////////////////////////////
@@ -25,15 +25,15 @@ var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line
 /**
  * Containing all 'remove jQuery' functions
  *
- * @type       {object}
+ * @type       object
  */
 var nojq = {
     /**
      * Fill Content function = fc Didn't say it would be easy !!
      *
-     * @param      {string}     el      The element to fill !css
-     * @param      {string}     html    The html
-     * @param      {function}   cb      A function in case you need do something after html things
+     * @param      string     el      The element to fill !css
+     * @param      string     html    The html
+     * @param      function   cb      A function in case you need do something after html things
      */
     fc: (el, html, cb) => {
         //Get element
@@ -51,9 +51,9 @@ var nojq = {
     /**
      * Shorcut for event handlers
      *
-     * @param      {string}     elementId  The element identifier
-     * @param      {string}     evt        The event
-     * @param      {function}   handler    The handler
+     * @param      string     elementId  The element identifier
+     * @param      string     evt        The event
+     * @param      function   handler    The handler
      */
     evhl: (elementId, evt, handler) => {
         if (elementId) {
@@ -63,7 +63,7 @@ var nojq = {
     },
 
     /**
-     * { function_description }
+     *  function_description 
      *
      * @param      string       el           The element to create
      * @param      string       appendIn     The element to append in
@@ -73,6 +73,8 @@ var nojq = {
      * @param      string       content      The content of the new element
      * @param      string       event        The event to listen
      * @param      function     eventHandle  The event handler
+     * 
+     * TODO: we have to make improvement about those messy params
      */
     ce: (el = '', appendIn = '', setId = '', setClass = [''], content = '', event = '', eventHandle) => {
         //element to create
@@ -203,11 +205,50 @@ nojq.evhl('#run-page', 'click', () => { selectOl('#run-page', runProject.page); 
 nojq.evhl('#build-page', 'click', () => { selectOl('#build-page', bld.page); });
 
 //test buttons
-/**test evhl
+//test evhl
 nojq.evhl('#but', 'click', () => {
-    var c = Array.from('yepapi');
-    console.log(c);
-});*/
+    /*fse.readdir('./node_modules', (err, f) => {
+        if (err) {
+            console.log(err);
+        } else {
+            for (var i = 0; i < f.length; i++) {
+                fse.readFile(`./node_modules/${f[i]}/license`, (err, data) => {
+                    fse.appendFile('./licences2.md', `#${f[i]}\n${data}\n`, (err) => {
+
+                    });
+                });
+               // if (true) {} else {} 
+               //console.log(f[i]);
+            }
+        }
+    });//*/
+
+    /*to only include production dependencies 
+    nlf.find({
+        directory: './',
+        summary: 'detail'
+    }, function (err, data) {
+        // do something with the response object. 
+        fse.writeJson('./licences2.json', data, (err) => {
+            console.log(err, 'or done');
+        });
+    });//*/
+
+    fse.readJson('./licences2.json', (err, da) => {
+        if (err) {console.log(err);} else {
+            $.each(da, (i, v) => {
+                //console.log(v);
+                if (v.licenseSources.license.sources[0]) {
+                    fse.appendFile('./licenses.md',`#${v.id}\n${v.repository}\n---\n${v.licenseSources.license.sources[0].text}\n`, 'utf-8', (err)=> {console.log(err,'or done');} );
+                } else {
+                    fse.appendFile('./licenses.md',`#${v.id}\n${v.repository}\n---\n${v.licenseSources.package.sources[0].license}\n`, 'utf-8', (err)=> {console.log(err,'or done');} );
+                }
+
+                });
+            
+        }
+    });//*/
+});
 
 /**
  *Navigation
@@ -219,8 +260,8 @@ nojq.evhl('#but', 'click', () => {
  * 
  * //TODO: Try foreach will be better
  *
- * @param      {String}    whichOne  The element selector
- * @param      {Function}  pageFn    The function that displays the correspondant view
+ * @param      string    whichOne  The element selector
+ * @param      function  pageFn    The function that displays the correspondant view
  */
 function selectOl(whichOne, pageFn) {
     /**get element for removing
@@ -245,7 +286,7 @@ function selectOl(whichOne, pageFn) {
 /**
  * Object to contain create project
  *
- * @type       {Object}     
+ * @type       Object     
  */
 var createProj = {};
 /**
@@ -307,7 +348,6 @@ createProj.drop = () => {
 /**
  * TODO...
  *
- * @return     {<type>}  { description_of_the_return_value }
  */
 createProj.page = () => {
 
@@ -381,7 +421,7 @@ createProj.action = () => {
     var newChProc_Create = execFile;
 
     //go for it
-    newChProc_Create(`cordova.cmd`, [`create`, `${fold}`, `${lru}`, `${name}`], {
+    newChProc_Create(corcmd, [`create`, `${fold}`, `${lru}`, `${name}`], {
         cwd: pth
     }, (error, stdout) => {
 
@@ -478,7 +518,7 @@ createProj.projectsJson = (foldPath, n) => {
 
         //messageBox.comeon(projets);
         //write proj.json
-        fse.writeJson('././user/projects.json', projets, () => {
+        fse.writeJson('./user/projects.json', projets, () => {
             //messageBox.comeon(`${projets[n]} writed`);
         });
     });
@@ -692,7 +732,7 @@ pl.thptyPage = () => {
 
                     //go for exec
                     //put plugin in plugin_container
-                    newChProcAddPlugThrdStore(`cordova.cmd`, [`plugin`, `add`, `--save`, $('#add-thrd-plug input').val()], {
+                    newChProcAddPlugThrdStore(corcmd, [`plugin`, `add`, `--save`, $('#add-thrd-plug input').val()], {
                         cwd: './user/plugin_container'
                     }, (error, stdout, stderr) => { //callback
 
@@ -705,7 +745,7 @@ pl.thptyPage = () => {
                             messageBox.comeon(`Plugin ${inputVal} added for offline use`);
 
                             //put plugin in project
-                            newChProcAddPlugThrdAdd(`cordova.cmd`, [`plugin`, `add`, `--save`, $('#add-thrd-plug input').val()], {
+                            newChProcAddPlugThrdAdd(corcmd, [`plugin`, `add`, `--save`, $('#add-thrd-plug input').val()], {
                                 cwd: curWDir
                             }, (error, stdout, stderr) => {
                                 //error    
@@ -834,7 +874,7 @@ pl.addPlug = (val, shPath) => {
     var newChProcAddPlug = execFile;
 
     //exec
-    newChProcAddPlug(`cordova.cmd`, [`plugin`, `add`, `--save`, val, `--searchpath`, shPath], {
+    newChProcAddPlug(corcmd, [`plugin`, `add`, `--save`, val, `--searchpath`, shPath], {
         cwd: curWDir
     }, (error, stdout, stderr) => {
         if (error) {
@@ -863,7 +903,7 @@ pl.removePlug = (val) => {
     var newChProc_RmPlug = execFile;
 
     //and so on
-    newChProc_RmPlug(`cordova.cmd`, [`plugin`, `rm`, `--save`, `${val}`], {
+    newChProc_RmPlug(corcmd, [`plugin`, `rm`, `--save`, `${val}`], {
         cwd: curWDir
     }, (error, stdout, stderr) => {
 
@@ -954,12 +994,12 @@ runProject.action = (platform) => {
     var newChProc_Run = execFile;
 
     //...
-    newChProc_Run(`cordova.cmd`, [`run`, `${platform}`], { cwd: curWDir }, (error, stderr, stdout) => {
+    newChProc_Run(corcmd, [`run`, `${platform}`], { cwd: curWDir }, (error, stderr, stdout) => {
         if (error) {
             messageBox.comeon(`Cordova said: ${error}.<br>This means that you don't fulfill all requirements to run your project for this platform<br>
                 <a target="_blank" href="http://cordova.apache.org/docs/en/latest/">Please see online documentation</a>
                  or the offline one <span id="messDocPlatLink">here</span>`);
-                nojq.evhl('#messDocPlatLink', 'click', ()=>{
+                nojq.evhl('#messDocPlatLink', 'click', () => {
                     plat.checkPlat();
                 });
             progrSs.good(() => {});
@@ -1124,7 +1164,7 @@ runProject.appendNewButton = (platform) => {
         var newChProc_RunAgain = execFile;
 
         //go for new running
-        newChProc_RunAgain(`cordova.cmd`, [`run`, `${platform}`], { cwd: curWDir }, (error, stderr, stdout) => {
+        newChProc_RunAgain(corcmd, [`run`, `${platform}`], { cwd: curWDir }, (error, stderr, stdout) => {
             if (error) {
                 messageBox.comeon(`Cordova said: ${error}.  This means that you don't fulfill all requirements to run your project for this platform`);
                 progrSs.good(() => {});
@@ -1271,10 +1311,11 @@ plat.menu = () => {
             'class': 'pluginDivChidren',
             click: () => {
 
-                /**slide down menu with doc files not everything is working
-                 *because I suppose that marked refuse to parse large files
-                 *this is the case for android platform 'index.md' which is obviously huge regarding
-                 *the others doc md files sizes
+                /**
+                 *  slide down menu with doc files not everything is working
+                 *  because I suppose that marked refuse to parse large files
+                 *  this is the case for android platform 'index.md' which is obviously huge regarding
+                 *  the others doc md files sizes
                  */
                 $(`#${key}_platDoc_menu`).slideToggle();
             }
@@ -1327,7 +1368,7 @@ plat.add = (a) => {
     var newChProc_AddPlatform = execFile;
 
     //do it
-    newChProc_AddPlatform(`cordova.cmd`, [`platform`, `add`, `${a}`, `--save`], { cwd: curWDir }, (error, stderr, stdout) => {
+    newChProc_AddPlatform(corcmd, [`platform`, `add`, `${a}`, `--save`], { cwd: curWDir }, (error, stderr, stdout) => {
         if (error) {
             messageBox.comeon(`-${error}`);
             progrSs.good(() => {});
@@ -1348,7 +1389,7 @@ plat.rm = (a) => {
     //execFile remove plat
     var newChProc_RemovePlat = execFile;
 
-    newChProc_RemovePlat(`cordova.cmd`, [`platform`, `rm`, `${a}`, `--save`], { cwd: curWDir }, (error, stderr, stdout) => {
+    newChProc_RemovePlat(corcmd, [`platform`, `rm`, `${a}`, `--save`], { cwd: curWDir }, (error, stderr, stdout) => {
         if (error) {
             messageBox.comeon(`-${error}`);
             progrSs.good(() => {});
@@ -1758,12 +1799,12 @@ bld.page = () => {
      */
     nojq.evhl('#build-unsign-deb', 'click', () =>{ 
         progrSs.strt();
-        setTimeout(()=>{
+        setTimeout(() => {
             //get the process
             var newChProc_Build_uns_deb = execFile;
 
             //and do it
-            newChProc_Build_uns_deb('cordova.cmd', ['build', 'android', '--debug'], { cwd: curWDir },
+            newChProc_Build_uns_deb(corcmd, ['build', 'android', '--debug'], { cwd: curWDir },
                 (error, stderr, stdout) => {
 
                     if (error) {
@@ -1781,18 +1822,18 @@ bld.page = () => {
      */
     nojq.evhl('#build-unsign-rel', 'click', () =>{ 
         progrSs.strt();
-        setTimeout(()=>{
+        setTimeout(() => {
             //get the process
             var newChProc_Build_uns_rel = execFile;
 
             //and do it
-            newChProc_Build_uns_rel('cordova.cmd', ['build', 'android', '--release'], { cwd: curWDir },
+            newChProc_Build_uns_rel(corcmd, ['build', 'android', '--release'], { cwd: curWDir },
                 (error, stderr, stdout) => {
 
                     if (error) {
                         messageBox.comeon(error, stderr);
                     } else {
-                        progrSs.good(()=>{
+                        progrSs.good(() => {
                             messageBox.comeon(stderr);
                         });
                     }
@@ -1805,7 +1846,7 @@ bld.page = () => {
      * Browse for key === trigger input file
      * Don't know for now how to do it
      */
-     nojq.evhl('#build-sign-browseK', 'click', ()=>{
+     nojq.evhl('#build-sign-browseK', 'click', () => {
         $('#build-sign-Kstore-path-inp-file').click();
      });
 
@@ -1814,7 +1855,7 @@ bld.page = () => {
      */
     //event handler
     nojq.evhl('#build-sign-button', 'click', () => {
-        setTimeout(()=>{
+        setTimeout(() => {
                 //get path input
             var ph = nojq.v('#build-sign-Kstore-path-inp');
 
@@ -1829,13 +1870,13 @@ bld.page = () => {
             //exec
             var newChProc_Build = execFile;
             //if (true) {} else {}
-            newChProc_Build('cordova.cmd', ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`], { cwd: curWDir },
+            newChProc_Build(corcmd, ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`], { cwd: curWDir },
                 (error, stderr, stdout) => {
                 
                     if (error) {
                         messageBox.comeon(error, stderr);
                     } else {
-                        progrSs.good(()=>{
+                        progrSs.good(() => {
                             messageBox.comeon(stderr);
                         });
                     }
@@ -1844,7 +1885,7 @@ bld.page = () => {
         progrSs.strt();
     });
 
-    nojq.evhl('#build-sign-Kstore-path-inp-file', 'change', ()=>{
+    nojq.evhl('#build-sign-Kstore-path-inp-file', 'change', () => {
         //var parPth = path.parse(nojq.v('#build-sign-Kstore-path-inp-file'));
         //console.log(parPth);
         nojq.v('#build-sign-Kstore-path-inp', nojq.v('#build-sign-Kstore-path-inp-file'));
@@ -2067,7 +2108,7 @@ bld.page = () => {
                         //and do it...\keytool.exe C:\\Program Files\\Android\\Android Studio\\jre\\jre\\bin\\
                         //TODO: make this an input to choose or a research with fse and get the good path here 
                         //because environement variable path is tricky with keytool, in my config at least
-                        newChProc_Key(`keytool.exe`, ['-genkeypair', '-dname', DName, '-keystore', PathKs, '-alias', $('#Alias-input').val(), '-storepass', $('#Password-input').val(), '-keypass', $('#PasswordKey-input').val(), '-validity', $('#Validity-number-input').val()], (error, stdout, stderr) => {
+                        newChProc_Key(ktx, ['-genkeypair', '-dname', DName, '-keystore', PathKs, '-alias', $('#Alias-input').val(), '-storepass', $('#Password-input').val(), '-keypass', $('#PasswordKey-input').val(), '-validity', $('#Validity-number-input').val()], (error, stdout, stderr) => {
                             if (error) {
                                 console.log(error);
                                 console.log(stderr);
@@ -2096,8 +2137,6 @@ bld.page = () => {
                             }
                         });
                     }, 2000);
-
-                    //progress
 
                 });
         }
@@ -2310,16 +2349,15 @@ var env = {
      * The form for env variables
      *
      */
-    page : ()=>{
+    page : () => {
         /**
          * Fill content
          */
         nojq.fc('#main-content', `
-                <div id="env">
-                    
+                <div id="env" class="pluginDiv">
                     <div id="cordova-env"><input id="c-env-path-inp-file" type="file">
                         <label for="cordova-env">cordova.cmd</label><br>
-                        <input id="c-env" name="cordova-env" placeholder="Path to executable" value="" style="margin-top: 4px; width:70%;" >
+                        <input id="c-env" name="cordova-env" value="" style="margin-top: 4px; width:70%;" >
                         <div class="pluginDivChidren" id="browse-c-env">Browse</div>
                     </div>
                     <div id="keytool-env"><input id="k-env-path-inp-file" type="file">
@@ -2331,56 +2369,131 @@ var env = {
                         <label for="editor-env">Your editor executable</label><br>
                         <input id="e-env" name="editor-env" placeholder="Path to executable" value="" style="margin-top: 4px; width:70%;">
                         <div class="pluginDivChidren" id="browse-e-env">Browse</div>
+                        
+                        <div id="launchEdit" class="pluginDivChidren">
+                            Launch your favorite editor on your project
+                        </div>
+                    
+                    </div>
+                    <div class="div-opt-container">
+                        <div id="valid-env-pths" class="pluginDivChidren">
+                            Validate
+                        </div>
                     </div>
                 </div>
             `);
         /**
          * click event for cordova env
          */
-        nojq.evhl('#browse-c-env', 'click', ()=>{
+        nojq.evhl('#browse-c-env', 'click', () => {
             //open file input
             $('#c-env-path-inp-file').click();
 
             //get the change to fill input
-            nojq.evhl('#c-env-path-inp-file', 'change', ()=>{
+            nojq.evhl('#c-env-path-inp-file', 'change', () => {
                 nojq.v('#c-env', nojq.v('#c-env-path-inp-file'));
-                cordoExe = nojq.v('#c-env-path-inp-file');
+                corcmd = nojq.v('#c-env-path-inp-file');
             });
         });
 
         /**
          * click event for keytool env
          */
-        nojq.evhl('#browse-k-env', 'click', ()=>{
+        nojq.evhl('#browse-k-env', 'click', () => {
             //open file input
             $('#k-env-path-inp-file').click();
 
             //get the change to fill input
-            nojq.evhl('#k-env-path-inp-file', 'change', ()=>{
+            nojq.evhl('#k-env-path-inp-file', 'change', () => {
                 nojq.v('#k-env', nojq.v('#k-env-path-inp-file'));
-                keytExe = nojq.v('#k-env-path-inp-file');
+                ktx = nojq.v('#k-env-path-inp-file');
             });
         });
 
         /**
          * click event for editor env
          */
-        nojq.evhl('#browse-e-env', 'click', ()=>{
+        nojq.evhl('#browse-e-env', 'click', () => {
             //open file input
             $('#e-env-path-inp-file').click();
 
             //get the change to fill input
-            nojq.evhl('#e-env-path-inp-file', 'change', ()=>{
+            nojq.evhl('#e-env-path-inp-file', 'change', () => {
                 nojq.v('#e-env', nojq.v('#e-env-path-inp-file'));
-                editExe = nojq.v('#e-env-path-inp-file');
+                edx = nojq.v('#e-env-path-inp-file');
             });
         });
+
+        /**
+         * Button to throw editor on curWdir
+         */
+        nojq.evhl('#launchEdit', 'click', () => {
+            //exec
+            var newChProc_Edit = execFile;
+
+            //and the thing
+            newChProc_Edit(edx, [curWDir], (err, stderr, stdout) => {
+                console.log(err);
+                console.log(stdout);
+                console.log(stderr);
+            });
+        });
+
+        /**
+         * Valid button to write cmdPath.json to have them persistent
+         */
+        nojq.evhl('#valid-env-pths', 'click', () => {
+            var objEnv = {
+                cxPth: nojq.v('#c-env'),
+                kxPth: nojq.v('#k-env'),
+                exPth: nojq.v('#e-env')
+            };
+            //write it
+            fse.writeJson('./user/cmdPath.json', objEnv, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log('writed', objEnv);
+                }
+            });
+        });
+
+        /**
+         * Function to get env pth vars
+         */
+        fse.readJson('./user/cmdPath.json', (err, d) => {
+            if (err) {
+                console.log(err);
+            } else {
+                //set vars
+                corcmd = d.cxPth;
+                ktx    = d.kxPth;
+                edx    = d.exPth;
+                //console.log(corcmd, ktx, edx);
+
+                //set input values
+                nojq.v('#c-env', corcmd);
+                nojq.v('#k-env', ktx);
+                nojq.v('#e-env', edx);
+            }
+        });
+        
+
     }//end of page
 };
-//ico div for settings, only env variable pathes
-nojq.evhl('#ico', 'click', ()=>{
+//ico div for settings, only env variable pathes for now
+nojq.evhl('#ico', 'click', () => {
     env.page();
 });
+/**
+ * globals for env path
+ *
+ * @type       {string}
+ */
+var corcmd = 'cordova.cmd',
+    ktx    = 'keytool.exe',
+    edx    = '';
+
 
 
 
@@ -2462,6 +2575,7 @@ const Config = require('cordova-config');
 //const configXml = new Config('config.xml');
 // Write the config file 
 //configXml.writeSync();
+var nlf = require('nlf');
 
 
 //First view

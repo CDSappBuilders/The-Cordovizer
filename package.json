@@ -1,78 +1,81 @@
 {
-    "webview": {
-        "partitions": [
-            {
-                "accessible_resources": [
-                    "<all_urls>"
-                ],
-                "name": "trusted"
-            }
-        ]
-    },
-    "name": "Cordovizer",
-    "dependencies": {
-        "showdown-table": "^1.0.1",
-        "marked": "^0.3.6",
-        "showdown": "^1.5.0",
-        "xml2js": "^0.4.17",
-        "highlight.js": "^9.8.0",
-        "ncp": "^2.0.0",
-        "fs-extra": "^1.0.0",
-        "cordova-config": "^0.6.2"
-    },
-    "node-remote": [],
-    "nodejs": true,
-    "description": "none for now",
-    "main": "index.html",
-    "webkit": {
-        "double_tap_to_zoom_enabled": false,
-        "plugin": false
-    },
-    "app_name": "TheCordovizer-1.0.0-Beta",
-    "window": {
-        "height": 650,
-        "id": "987654321",
-        "frame": false,
-        "show": true,
-        "fullscreen": false,
-        "min_width": 0,
-        "show_in_taskbar": true,
-        "resizable": true,
-        "kiosk_emulation": false,
-        "kiosk": false,
-        "visible": true,
-        "icon": "./icons/beta-ico256.png",
-        "as_desktop": false,
-        "width": 800,
-        "always_on_top": false,
-        "title": "The Cordovizer",
-        "transparent": false,
-        "min_height": 0,
-        "exe_icon": "icons\\beta-ico64.png",
-        "position": "center",
-        "visible_on_all_workspaces": false
-    },
-    "version": "0.1.0",
-    "webexe_settings": {
-        "sdk_build": true,
-        "download_dir": "C:/Users/jo/AppData/Local/Web2Executable/Web2Executable/files/downloads",
-        "output_pattern": "",
-        "export_dir": "C:\\AppDev\\nwjs-sdk-v0.21.0-win-x64\\Cordovizer",
-        "mac-x64": false,
-        "force_download": false,
-        "custom_script": "",
-        "uncompressed_folder": true,
-        "linux-x64": false,
-        "windows-x32": false,
-        "nw_version": "0.20.3",
-        "windows-x64": true,
-        "nw_compression_level": 0,
-        "linux-x32": false
-    },
-    "keywords": [
-        "none",
-        "for",
-        "now"
-    ],
-    "additional_trust_anchors": []
+  "webview": {
+    "partitions": [
+      {
+        "accessible_resources": [
+          "<all_urls>"
+        ],
+        "name": "trusted"
+      }
+    ]
+  },
+  "name": "Cordovizer",
+  "dependencies": {
+    "showdown-table": "^1.0.1",
+    "marked": "^0.3.6",
+    "showdown": "^1.5.0",
+    "xml2js": "^0.4.17",
+    "highlight.js": "^9.8.0",
+    "ncp": "^2.0.0",
+    "fs-extra": "^1.0.0",
+    "cordova-config": "^0.6.2"
+  },
+  "node-remote": [],
+  "nodejs": true,
+  "description": "none for now",
+  "main": "index.html",
+  "webkit": {
+    "double_tap_to_zoom_enabled": false,
+    "plugin": false
+  },
+  "app_name": "TheCordovizer-1.0.0-Beta",
+  "window": {
+    "height": 650,
+    "id": "987654321",
+    "frame": false,
+    "show": true,
+    "fullscreen": false,
+    "min_width": 0,
+    "show_in_taskbar": true,
+    "resizable": true,
+    "kiosk_emulation": false,
+    "kiosk": false,
+    "visible": true,
+    "icon": "./icons/beta-ico256.png",
+    "as_desktop": false,
+    "width": 800,
+    "always_on_top": false,
+    "title": "The Cordovizer",
+    "transparent": false,
+    "min_height": 0,
+    "exe_icon": "icons\\beta-ico64.png",
+    "position": "center",
+    "visible_on_all_workspaces": false
+  },
+  "version": "0.1.0",
+  "webexe_settings": {
+    "sdk_build": true,
+    "download_dir": "C:/Users/jo/AppData/Local/Web2Executable/Web2Executable/files/downloads",
+    "output_pattern": "",
+    "export_dir": "C:\\AppDev\\nwjs-sdk-v0.21.0-win-x64\\Cordovizer",
+    "mac-x64": false,
+    "force_download": false,
+    "custom_script": "",
+    "uncompressed_folder": true,
+    "linux-x64": false,
+    "windows-x32": false,
+    "nw_version": "0.20.3",
+    "windows-x64": true,
+    "nw_compression_level": 0,
+    "linux-x32": false
+  },
+  "keywords": [
+    "none",
+    "for",
+    "now"
+  ],
+  "additional_trust_anchors": [],
+  "devDependencies": {
+    "nlf": "^1.4.3"
+  }
 }
