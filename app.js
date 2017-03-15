@@ -2433,9 +2433,11 @@ var env = {
 
             //and the thing
             newChProc_Edit(edx, [curWDir], (err, stderr, stdout) => {
-                console.log(err);
-                console.log(stdout);
-                console.log(stderr);
+                if (err) {
+                    messageBox.comeon(err, stdout, stderr);
+                } else {
+                    messageBox.comeon('Your editor is running over your project');
+                }
             });
         });
 
@@ -2453,7 +2455,7 @@ var env = {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log('writed', objEnv);
+                    //console.log('writed', objEnv);
                 }
             });
         });
