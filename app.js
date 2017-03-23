@@ -7,9 +7,22 @@ var curWin = nw.Window.get();
 //Be sure of main window size when openning
 curWin.on('loaded', () => {
     curWin.resizeTo(800, 500);
-    console.log('opened');
+    //console.log('opened');
+    
     //Check for online status
     onl.check();
+
+    //get env path 
+    fse.readJson('./user/cmdPath.json', (err, d) => {
+        if (err) {
+            messageBox.comeon(err);
+        } else {
+            //set vars
+            corcmd = d.cxPth;
+            ktx    = d.kxPth;
+            edx    = d.exPth;
+        }
+    });
 });
 
 /**
@@ -186,6 +199,11 @@ nojq.evhl('#fullS', 'click', () => {
 //Close button
 nojq.evhl('#closeW', 'click', () => { curWin.close(); });
 
+//settings, only env variable pathes for now
+nojq.evhl('#sets', 'click', () => {
+    env.page();
+});
+
 /**
  * Setting nav event handlers
  * ID's speaking for themselves
@@ -203,9 +221,33 @@ nojq.evhl('#platforms-page', 'click', () => { selectOl('#platforms-page', plat.c
 nojq.evhl('#configxml-page', 'click', () => { selectOl('#configxml-page', cfxml.page); });
 nojq.evhl('#run-page', 'click', () => { selectOl('#run-page', runProject.page); });
 nojq.evhl('#build-page', 'click', () => { selectOl('#build-page', bld.page); });
+/**
+ * Button to throw editor on curWdir
+ */
+nojq.evhl('#launchEdit', 'click', () => {
+    if (edx === '') {
+        messageBox.comeon('You must choose an editor in your computer: click on the icon to toggle settings page.')
+    } else {
+        if (curWDir) {
+            //exec
+            var newChProc_Edit = execFile;
+            //and the thing
+            newChProc_Edit(edx, [curWDir], (err, stderr, stdout) => {
+                 if (err) {
+                    messageBox.comeon(err, stdout, stderr);
+                } else {
+                    messageBox.comeon('Your editor is running over your project');
+                }
+            });
+        } else {
+            messageBox.comeon('Please select a project or create a new one.')
+        }
+    }
+});
+
 
 //test buttons
-//test evhl
+/**test evhl
 nojq.evhl('#but', 'click', () => {
     /*fse.readdir('./node_modules', (err, f) => {
         if (err) {
@@ -232,7 +274,7 @@ nojq.evhl('#but', 'click', () => {
         fse.writeJson('./licences2.json', data, (err) => {
             console.log(err, 'or done');
         });
-    });//*/
+    });//
 
     fse.readJson('./licences2.json', (err, da) => {
         if (err) {console.log(err);} else {
@@ -247,8 +289,8 @@ nojq.evhl('#but', 'click', () => {
                 });
             
         }
-    });//*/
-});
+    });
+});//*
 
 /**
  *Navigation
@@ -284,7 +326,7 @@ function selectOl(whichOne, pageFn) {
 }
 
 /**
- * Object to contain create project
+ * Object to contain create project page
  *
  * @type       Object     
  */
@@ -497,7 +539,9 @@ createProj.changeWww = (p, f, www, n) => {
 createProj.projectsJson = (foldPath, n) => {
     //create or update json file for user projects index
     fse.readJson('././user/projects.json', (err, projets) => {
-        if (err) { console.log(err); }
+        if (err) {
+             messageBox.comeon(err); 
+        }
         //date of creation for ./user/projects.json
         var d = new Date(),
             j = d.getDate(),
@@ -737,10 +781,9 @@ pl.thptyPage = () => {
                     }, (error, stdout, stderr) => { //callback
 
                         //error
-                        if (error) { console.log(error); }
-
-                        //else
-                        else {
+                        if (error) {
+                             messageBox.comeon(error); 
+                        } else {
                             //prompt user
                             messageBox.comeon(`Plugin ${inputVal} added for offline use`);
 
@@ -749,7 +792,9 @@ pl.thptyPage = () => {
                                 cwd: curWDir
                             }, (error, stdout, stderr) => {
                                 //error    
-                                if (error) { console.log(error); } else {
+                                if (error) {
+                                     messageBox.comeon(error); 
+                                } else {
                                     messageBox.comeon(`Plugin ${inputVal} added in ${curWDir}`);
                                     progrSs.good(() => {});
                                 }
@@ -944,40 +989,49 @@ var runProject = {};
 runProject.page = () => {
 
     //check if a project is selected
-    if (curWDir === undefined) { messageBox.comeon('Please select a project or create a new one'); } else {
+    if (!curWDir) {
+         messageBox.comeon('Please select a project or create a new one'); 
+    } else {
         //empty content
         nojq.fc('#main-content', '');
-
+//TODO: tell user if there is no platform installed
         //get existing platforms with userProject/platforms/platforms.json and make a div with $.each
         fse.readJson(`${curWDir}\\platforms\\platforms.json`, (err, plats) => {
             if (err) {
                 messageBox.comeon(err); 
             } else {
-                $.each(plats, (platform, version) => {
 
-                    //create the div 
-                    $('<div/>', {
-                        id: platform,
-                        html: platform,
-                        'class': 'pluginDiv'
-                    }).appendTo('#main-content');
+                if (Object.keys(plats).length === 0) {
+                    nojq.fc('#main-content','<div style="text-align:center;">There is no platform installed in your project,<br>please go to platform page to add one</div>');
+                    //console.log(plats);
+                } else {
+                    $.each(plats, (platform, version) => {
 
-                    //the usual container
-                    $('<div/>', {
-                        'class': 'div-opt-container'
-                    }).appendTo(`#${platform}`);
+                        //create the div 
+                        $('<div/>', {
+                            id: platform,
+                            html: platform,
+                            'class': 'pluginDiv'
+                        }).appendTo('#main-content');
 
-                    //append the run button in div
-                    $('<div/>', {
-                        text: 'Run',
-                        'class': 'pluginDivChidren',
-                        //here is the running thing
-                        click: () => {
-                            runProject.run(platform);
-                        }
-                    }).appendTo(`#${platform} .div-opt-container`);
+                        //the usual container
+                        $('<div/>', {
+                            'class': 'div-opt-container'
+                        }).appendTo(`#${platform}`);
 
-                });
+                        //append the run button in div
+                        $('<div/>', {
+                            text: 'Run',
+                            'class': 'pluginDivChidren',
+                            //here is the running thing
+                            click: () => {
+                                runProject.run(platform);
+                            }
+                        }).appendTo(`#${platform} .div-opt-container`);
+
+                    });
+                }
+                
             }
         });
     } //else
@@ -1155,7 +1209,7 @@ runProject.appendNewButton = (platform) => {
             top: '35px'
         }
     }).click(() => {
-        console.log('run again clicked');
+        //console.log('run again clicked');
 
         //Run the app on device or emulator 
         //here to kill process if needed.. it seems so!
@@ -1234,7 +1288,7 @@ plat.checkPlat = () => {
     //TODO: check the same but with /platforms.json
     fse.readdir(`${curWDir}\\platforms`, (err, files) => {
         addedPlats = files;
-        console.log(addedPlats);
+        //console.log(addedPlats);
         //messageBox.comeon(`${curWDir}\\platforms`);
 
 
@@ -1327,7 +1381,7 @@ plat.menu = () => {
             'class': 'platDocMenu'
         }).appendTo(`#${key}_platDoc`).hide();
 
-        //and finally 'add platform' button
+        //and finally add the 'add platform' button
         $('<div/>', {
             id: `${key}_platAdd`,
             text: 'Add platform',
@@ -1400,7 +1454,7 @@ plat.rm = (a) => {
             progrSs.good(() => {});
 
             //change button style and text to 'add' or 'remove'
-            $(`#${a}`).css('border', '0px');
+            $(`#${a}`).removeClass('div-proj-selected');
             $(`#${a}_platAdd`).attr('data-added', 0);
             nojq.fc(`#${a}_platAdd`, 'Add platform');
 
@@ -1416,7 +1470,7 @@ plat.page = () => {
 
 //function to chage style when platform is here or just added
 plat.btnChange = (a) => {
-    $(`#${a}`).css('border', '2.555px solid blue');
+    $(`#${a}`).addClass('div-proj-selected');
     $(`#${a}_platAdd`).attr('data-added', 1);
     nojq.fc(`#${a}_platAdd`, 'Remove');
 };
@@ -1590,7 +1644,7 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
 
                         //write the file right here
                         configXml.write(() => {
-                            console.log(cfxml.pref);
+                           // console.log(cfxml.pref);
 
                             //empty inputs for a new round
                             $('#pref-name').val('');
@@ -1894,11 +1948,13 @@ bld.page = () => {
     /**
      * Keys created before
      */
-    fse.readJson('./user/keys/allkeys.json', (e, exK) => {
-        if (e) { console.log(e); } else {
-
+    fse.readJson('./user/keys/allkeys.json', (err, exK) => {
+        if (err) {
+             messageBox.comeon(err); 
+        } else {
             for (let [k, v] of Object.entries(exK)) {
                 //console.log(k, v);
+                
                 //create div for each stored key
                 nojq.ce('div',
                     '#build-sign-existingK-div',
@@ -1951,9 +2007,9 @@ bld.page = () => {
 
     //Fill it with inputs
     //get data
-    fse.readJson('./user/keys/lastkey.json', (e, kjs) => {
-        if (e) {
-            console.log(e); 
+    fse.readJson('./user/keys/lastkey.json', (err, kjs) => {
+        if (err) {
+            messageBox.comeon(err); 
         } else {
             //handle dname 
             for (let [k, v] of Object.entries(kjs.dname)) {
@@ -2110,12 +2166,14 @@ bld.page = () => {
                         //because environement variable path is tricky with keytool, in my config at least
                         newChProc_Key(ktx, ['-genkeypair', '-dname', DName, '-keystore', PathKs, '-alias', $('#Alias-input').val(), '-storepass', $('#Password-input').val(), '-keypass', $('#PasswordKey-input').val(), '-validity', $('#Validity-number-input').val()], (error, stdout, stderr) => {
                             if (error) {
-                                console.log(error);
-                                console.log(stderr);
+                                messageBox.comeon(error);
+                                messageBox.comeon(stderr);
                             } else {
                                 //get allkeys.json obj
                                 fse.readJson('./user/keys/allkeys.json', (err, objK) => {
-                                    if (err) { console.log(err); } else {
+                                    if (err) {
+                                         messageBox.comeon(err); 
+                                    } else {
                                         //get info to put inside
                                         var n = Nm;
 
@@ -2210,7 +2268,7 @@ messageBox.comeon = (message) => {
                 //resize function in the callback, this is temporary before setting 
                 //an onload function to hide the window when loading
             }, (newWin) => {
-                console.log('new win opened');
+                //console.log('new win opened');
                 newWin.setMaximumSize(600, 250);
             });
         });
@@ -2369,10 +2427,6 @@ var env = {
                         <label for="editor-env">Your editor executable</label><br>
                         <input id="e-env" name="editor-env" placeholder="Path to executable" value="" style="margin-top: 4px; width:70%;">
                         <div class="pluginDivChidren" id="browse-e-env">Browse</div>
-                        
-                        <div id="launchEdit" class="pluginDivChidren">
-                            Launch your favorite editor on your project
-                        </div>
                     
                     </div>
                     <div class="div-opt-container">
@@ -2425,23 +2479,6 @@ var env = {
         });
 
         /**
-         * Button to throw editor on curWdir
-         */
-        nojq.evhl('#launchEdit', 'click', () => {
-            //exec
-            var newChProc_Edit = execFile;
-
-            //and the thing
-            newChProc_Edit(edx, [curWDir], (err, stderr, stdout) => {
-                if (err) {
-                    messageBox.comeon(err, stdout, stderr);
-                } else {
-                    messageBox.comeon('Your editor is running over your project');
-                }
-            });
-        });
-
-        /**
          * Valid button to write cmdPath.json to have them persistent
          */
         nojq.evhl('#valid-env-pths', 'click', () => {
@@ -2453,7 +2490,7 @@ var env = {
             //write it
             fse.writeJson('./user/cmdPath.json', objEnv, (err) => {
                 if (err) {
-                    console.log(err);
+                    messageBox.comeon(err);
                 } else {
                     //console.log('writed', objEnv);
                 }
@@ -2465,7 +2502,7 @@ var env = {
          */
         fse.readJson('./user/cmdPath.json', (err, d) => {
             if (err) {
-                console.log(err);
+                messageBox.comeon(err);
             } else {
                 //set vars
                 corcmd = d.cxPth;
@@ -2483,10 +2520,6 @@ var env = {
 
     }//end of page
 };
-//ico div for settings, only env variable pathes for now
-nojq.evhl('#ico', 'click', () => {
-    env.page();
-});
 /**
  * globals for env path
  *
@@ -2594,10 +2627,10 @@ function xml(pathx, pathj) {
     fse.readFile(pathx, (err, data) => {
         xmlParser.parseString(data, (err, result) => {
             fse.writeJson(pathj, result, () => {
-                console.log('config.json writed avec writeJson');
+                //console.log('config.json writed avec writeJson');
             });
             //console.dir(result.widget);
-            console.log('done for xml');
+            //console.log('done for xml');
         });
     });
 }

@@ -41,7 +41,7 @@
     "kiosk_emulation": false,
     "kiosk": false,
     "visible": true,
-    "icon": "./icons/logo-cordo-beta2-512.png",
+    "icon": "./icons/logo-cordo-beta4-512.png",
     "as_desktop": false,
     "width": 800,
     "always_on_top": false,
