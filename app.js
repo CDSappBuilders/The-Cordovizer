@@ -8,7 +8,7 @@ var curWin = nw.Window.get();
 curWin.on('loaded', () => {
     curWin.resizeTo(800, 500);
     //console.log('opened');
-    
+
     //Check for online status
     onl.check();
 
@@ -19,8 +19,8 @@ curWin.on('loaded', () => {
         } else {
             //set vars
             corcmd = d.cxPth;
-            ktx    = d.kxPth;
-            edx    = d.exPth;
+            ktx = d.kxPth;
+            edx = d.exPth;
         }
     });
 });
@@ -143,7 +143,7 @@ var nojq = {
     v: (el, val) => {
         //get elem
         var elem = document.querySelector(el);
-        
+
         //do the thing quickly
         if (val) {
 
@@ -159,7 +159,7 @@ var nojq = {
     at: (el, attr, atVal) => {
         //get elem
         var elem = document.querySelector(el);
-        
+
         //do the thing
         if (atVal) {
 
@@ -224,7 +224,7 @@ nojq.evhl('#build-page', 'click', () => { selectOl('#build-page', bld.page); });
 /**
  * Button to throw editor on curWdir
  */
-nojq.evhl('#launchEdit', 'click', () => {
+nojq.evhl('#launch-edit', 'click', () => {
     if (edx === '') {
         messageBox.comeon('You must choose an editor in your computer: click on the icon to toggle settings page.')
     } else {
@@ -233,7 +233,7 @@ nojq.evhl('#launchEdit', 'click', () => {
             var newChProc_Edit = execFile;
             //and the thing
             newChProc_Edit(edx, [curWDir], (err, stderr, stdout) => {
-                 if (err) {
+                if (err) {
                     messageBox.comeon(err, stdout, stderr);
                 } else {
                     messageBox.comeon('Your editor is running over your project');
@@ -265,7 +265,7 @@ nojq.evhl('#but', 'click', () => {
         }
     });//*/
 
-    /*to only include production dependencies 
+/*to only include production dependencies 
     nlf.find({
         directory: './',
         summary: 'detail'
@@ -321,8 +321,8 @@ function selectOl(whichOne, pageFn) {
     //Display page
     pageFn();*/
     $('.nav-ol-child').removeClass('nav-ol-selected');
-        $(whichOne).addClass('nav-ol-selected');
-        pageFn();
+    $(whichOne).addClass('nav-ol-selected');
+    pageFn();
 }
 
 /**
@@ -344,8 +344,7 @@ createProj.drop = () => {
      */
     nojq.fc('#main-content', `   
         <input id="user-www-input-file" title="Pick a folder" type="file" nwdirectory="">
-        <div id="pickWwwFold"><bold>Pick your code folder</bold><br>
-        <small>.html .js .css</small></div>
+        <div id="pickWwwFold"><bold>Place your code folder here</bold><br>or just click to look for it</div>
         `);
 
     //set header content
@@ -540,7 +539,7 @@ createProj.projectsJson = (foldPath, n) => {
     //create or update json file for user projects index
     fse.readJson('././user/projects.json', (err, projets) => {
         if (err) {
-             messageBox.comeon(err); 
+            messageBox.comeon(err);
         }
         //date of creation for ./user/projects.json
         var d = new Date(),
@@ -590,8 +589,7 @@ const chooseProject = () => {
                  */
                 nojq.ce('div',
                     '#main-content',
-                    key,
-                    ['projects-page-base-div'],
+                    key, ['projects-page-base-div'],
                     key,
                     'click',
                     () => {
@@ -611,8 +609,7 @@ const chooseProject = () => {
                  */
                 nojq.ce('div',
                     `#${key}`,
-                    '',
-                    ['projects-page-base-div-data-container'],
+                    '', ['projects-page-base-div-data-container'],
                     `${value.date}<br>${value.heure}`);
 
                 /**
@@ -620,8 +617,7 @@ const chooseProject = () => {
                  */
                 nojq.ce('div',
                     `#${key} .projects-page-base-div-data-container`,
-                    '',
-                    ['projects-page-base-divOptPath'],
+                    '', ['projects-page-base-divOptPath'],
                     `${value.path}`);
             }
 
@@ -782,7 +778,7 @@ pl.thptyPage = () => {
 
                         //error
                         if (error) {
-                             messageBox.comeon(error); 
+                            messageBox.comeon(error);
                         } else {
                             //prompt user
                             messageBox.comeon(`Plugin ${inputVal} added for offline use`);
@@ -793,7 +789,7 @@ pl.thptyPage = () => {
                             }, (error, stdout, stderr) => {
                                 //error    
                                 if (error) {
-                                     messageBox.comeon(error); 
+                                    messageBox.comeon(error);
                                 } else {
                                     messageBox.comeon(`Plugin ${inputVal} added in ${curWDir}`);
                                     progrSs.good(() => {});
@@ -990,19 +986,19 @@ runProject.page = () => {
 
     //check if a project is selected
     if (!curWDir) {
-         messageBox.comeon('Please select a project or create a new one'); 
+        messageBox.comeon('Please select a project or create a new one');
     } else {
         //empty content
         nojq.fc('#main-content', '');
-//TODO: tell user if there is no platform installed
+        //TODO: tell user if there is no platform installed
         //get existing platforms with userProject/platforms/platforms.json and make a div with $.each
         fse.readJson(`${curWDir}\\platforms\\platforms.json`, (err, plats) => {
             if (err) {
-                messageBox.comeon(err); 
+                messageBox.comeon(err);
             } else {
 
                 if (Object.keys(plats).length === 0) {
-                    nojq.fc('#main-content','<div style="text-align:center;">There is no platform installed in your project,<br>please go to platform page to add one</div>');
+                    nojq.fc('#main-content', '<div style="text-align:center;">There is no platform installed in your project,<br>please go to platform page to add one</div>');
                     //console.log(plats);
                 } else {
                     $.each(plats, (platform, version) => {
@@ -1031,7 +1027,7 @@ runProject.page = () => {
 
                     });
                 }
-                
+
             }
         });
     } //else
@@ -1053,9 +1049,9 @@ runProject.action = (platform) => {
             messageBox.comeon(`Cordova said: ${error}.<br>This means that you don't fulfill all requirements to run your project for this platform<br>
                 <a target="_blank" href="http://cordova.apache.org/docs/en/latest/">Please see online documentation</a>
                  or the offline one <span id="messDocPlatLink">here</span>`);
-                nojq.evhl('#messDocPlatLink', 'click', () => {
-                    plat.checkPlat();
-                });
+            nojq.evhl('#messDocPlatLink', 'click', () => {
+                plat.checkPlat();
+            });
             progrSs.good(() => {});
         } else {
             messageBox.comeon(`Running ${stdout}`);
@@ -1284,55 +1280,45 @@ plat.platform = {
 
 plat.checkPlat = () => {
 
-    //check for platforms in project directory
+    /**
+     *Look for existing platforms in user project directory
+     */
     //TODO: check the same but with /platforms.json
     fse.readdir(`${curWDir}\\platforms`, (err, files) => {
         addedPlats = files;
         //console.log(addedPlats);
         //messageBox.comeon(`${curWDir}\\platforms`);
 
-
         /**
-        //check for platform requirements
-        //HAVE TO CHANGE THIS WILL TRY NO REQUIREMENTS JUST BUILD FOR ONE LATFORM AT A TIME
-
-        $.each(files, (i, v) => {
-            if (v==='platforms.json') {}
-            else {
-                exec(  `cordova requirements ${v} `, {cwd:curWDir}, (error, stderr, stdout) => {
-                    if (error) {
-                        messageBox.comeon(error);
-                        console.log(error);
-                        }
-                    else {
-                        messageBox.comeon(stdout + stderr);
-                        console.log(stdout + stderr);
-                    }
-                }); 
-            }
-        });
-        */
-
-        //display the platform main page
+         * Display the platform main page
+         */
         plat.menu();
     });
 };
 
-//this is it
+/**
+ * Platform main page
+ *
+ * @return     {<type>}  { description_of_the_return_value }
+ */
 plat.menu = () => {
 
-    //empty content
+    //Empty content
     nojq.fc('#main-content', '');
 
-    //make div for each avaible platform
+    //Make div for each platform in plat.platform
     $.each(plat.platform, (key, value) => {
+        /**
+         * Platform documentation
+         * (in progress...)
+         */
 
-        //recup doc folder et read files        
+        //Get doc locally        
         fse.readdir(`./user/cordova_platforms/${key}`, (error, files) => {
             docPlatform = files;
             //messageBox.comeon(files);
 
-            //displaying doc files name
+            //Displaying doc files name
             $.each(files, (k, v) => {
                 $('<div/>', {
                     id: `${k}_doc`,
@@ -1346,19 +1332,23 @@ plat.menu = () => {
             });
         });
 
-        //making a div for each platform avaible
+        /**
+         * Showing platforms
+         */
+
+        //Making a div for each 
         $('<div/>', {
             id: `${key}`,
             text: `${value}`,
             'class': 'pluginDiv'
         }).appendTo('#main-content');
 
-        //appending a div to the precedent to put it on 'float right'
+        //Appending a div to the precedent to put it on 'float right'
         $('<div/>', {
             'class': 'div-opt-container'
         }).appendTo(`#${key}`);
 
-        //appending documentation button
+        //Appending documentation button
         $('<div/>', {
             id: `${key}_platDoc`,
             text: 'read the doc',
@@ -1367,7 +1357,7 @@ plat.menu = () => {
 
                 /**
                  *  slide down menu with doc files not everything is working
-                 *  because I suppose that marked refuse to parse large files
+                 *  because I suppose that marked refuses to parse large files
                  *  this is the case for android platform 'index.md' which is obviously huge regarding
                  *  the others doc md files sizes
                  */
@@ -1375,7 +1365,7 @@ plat.menu = () => {
             }
         }).appendTo(`#${key} .div-opt-container`);
 
-        //div containing doc menu
+        //Div containing doc menu
         $('<div/>', {
             id: `${key}_platDoc_menu`,
             'class': 'platDocMenu'
@@ -1389,7 +1379,7 @@ plat.menu = () => {
             'data-added': 0,
             click: () => {
 
-                //check if a project is selected
+                //Check if a project is selected
                 if (curWDir === undefined) { messageBox.comeon('Please select a project or create a new one'); } else {
                     var dtad = $(`#${key}_platAdd`).attr('data-added');
                     if (dtad == 0) {
@@ -1406,7 +1396,7 @@ plat.menu = () => {
             }
         }).appendTo(`#${key} .div-opt-container`);
 
-        //check for installed platforms
+        //Check for installed platforms
         var addeds = $.inArray(key, addedPlats);
         if (addeds === -1) {
             //messageBox.comeon(`${value} pas la ${addeds}`);
@@ -1416,7 +1406,11 @@ plat.menu = () => {
     });
 };
 
-//'add platform function'
+/**
+ * Add platform function
+ *
+ * @param      string  a       The platform user want to add.
+ */
 plat.add = (a) => {
     //execF add plat
     var newChProc_AddPlatform = execFile;
@@ -1438,7 +1432,11 @@ plat.add = (a) => {
     });
 };
 
-//Remove platform at list trying to !!
+/**
+ * Removing platform
+ *
+ * @param      string  a       The platform user want to remove.
+ */
 plat.rm = (a) => {
     //execFile remove plat
     var newChProc_RemovePlat = execFile;
@@ -1462,13 +1460,20 @@ plat.rm = (a) => {
     });
 };
 
-//function to start progress bar at good time
+/**
+ * Start progress bar at good time
+ *
+ */
 plat.page = () => {
     setTimeout(plat.add(), 5000);
     progrSs.strt();
 };
 
-//function to chage style when platform is here or just added
+/**
+ * Change style when platform is here or just added
+ *
+ * @param      string  a       Add/Remove button id
+ */
 plat.btnChange = (a) => {
     $(`#${a}`).addClass('div-proj-selected');
     $(`#${a}_platAdd`).attr('data-added', 1);
@@ -1476,11 +1481,15 @@ plat.btnChange = (a) => {
 };
 
 /**
-Edit config.xml
-*/
+ *Edit config.xml
+ */
 var cfxml = {};
 
-//FrontEnd
+/**
+ * Edit config.xml page
+ *
+ * @return     {<type>}  { description_of_the_return_value }
+ */
 cfxml.page = () => { //TODO: update config.json with new config.xml
     //empty content
     nojq.fc('#main-content', '');
@@ -1513,18 +1522,18 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                 }); //each
 
                 //Fill divs
-                //remove input by removing second class when needed
+                //Remove input by removing second class ('cfxmlDiv') when needed
                 $('#description, #author, #allowintent, #platform, #plugin, #preference').removeClass('cfxmlDiv');
 
-                //sets inputs
+                //Set inputs
                 $('<input>', {}).appendTo('.cfxmlDiv');
 
-                //Textarea for description
+                //Textarea for description div
                 $('<textarea/>', {}).appendTo('#description');
 
-                //
-                //apply values to inputs (from config.json)
-                //
+                /**
+                 * apply values to inputs (from config.json)
+                 */
                 $('#content input').val(cfxml.pJ.widget.content.attr.src).change(() => {
                     //messageBox.comeon($('#content input').val());
                     configXml.setContent($('#content input').val());
@@ -1543,7 +1552,7 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                     configXml.setID($('#id input').val());
                 });
 
-                //TODO: clone on line 1545
+
                 $('#version input').val(cfxml.pJ.widget.attr.version).change(() => {
                     //android version code
                     //get and split version number
@@ -1644,7 +1653,7 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
 
                         //write the file right here
                         configXml.write(() => {
-                           // console.log(cfxml.pref);
+                            // console.log(cfxml.pref);
 
                             //empty inputs for a new round
                             $('#pref-name').val('');
@@ -1696,7 +1705,7 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                 });
 
                 /*
-                 *platform
+                 *Platforms
                  */
                 $.each(cfxml.pJ.widget.platform, (k, v) => {
                     //messageBox.comeon(k);
@@ -1706,7 +1715,8 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                         html: `${v.attr.name}`
                     }).appendTo('#platform');
 
-                    /** not very good! have to check if multiple entrys instead of checking for ios
+                    /** 
+                     * not very good! have to check if multiple entrys instead of checking for ios
                      * isArray?
                      */
                     if (v.attr.name === 'ios') {
@@ -1720,17 +1730,17 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                         });
                     }
 
-
+                    //Display href allow intent in input
                     $('<input>', {
                         id: `${k}_input`,
                         value: v['allow-intent'].attr.href
                     }).appendTo(`#${v.attr.name}`);
 
                     /**
-                     *plugins************
+                     *Plugins
                      */
 
-                    //Create container div
+                    //Create div to put existing plugins inside
                     $('<div/>', {
                         id: 'exist-plug-div'
                     }).appendTo('#plugin');
@@ -1752,10 +1762,12 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                         }
                     });
                 });
-            } //else readJson
+            }
         });
 
-        //valid button
+        /**
+         * Valid button
+         */
         $('<div/>', {
             'class': `cfxml-valid-button`,
             html: `Done`,
@@ -1776,15 +1788,18 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                 });
             }
         }).appendTo('#main-content');
-    } //else 
+    }
 };
 
-//object to store pref
+//Object to store pref
 cfxml.pref = {};
 
-//parsed json filled by config.json object
+//parsed json: filled by config.json object
 cfxml.pJ
 
+/**
+ * Object to order the page
+ */
 cfxml.layout = {
     author: {
         name: '',
@@ -1809,13 +1824,123 @@ cfxml.layout = {
  *Build (it's about time!!!)
  */
 
-//build fn object
+/**
+ * build var
+ *
+ * @type       object 
+ */
 var bld = {};
+
+bld.checkPlat = () => {
+    //check if a project is selected
+    if (!curWDir) {
+        messageBox.comeon('Please select a project or create a new one');
+    } else {
+
+    }
+}
 
 //y Vamos
 bld.page = () => {
-    //empty content
+    /**
+     * Set content
+     * but first check for avaible platforms ...again...
+     */
+    //check if a project is selected
+    if (!curWDir) {
+        messageBox.comeon('Please select a project or create a new one');
+    } else {
+        fse.readJson(`${curWDir}\\platforms\\platforms.json`, (err, plats) => {
+            if (err) {
+                messageBox.comeon(err);
+            } else {
+
+                if (Object.keys(plats).length === 0) {
+                    nojq.fc('#main-content', '<div style="text-align:center;">There is no platform installed in your project,<br>please go to platform page to add one</div>');
+                    //console.log(plats);
+                } else {
+                    for (let [plat, v] of Object.entries(plats)) {
+                        /**
+                         * Display platforms and build options Very basic for now 
+                         */
+
+                        //Get rid of android in this, we handled it separately before
+                        if (plat != 'android') {
+                            nojq.ce('div',
+                                '#build-all-plat',
+                                `${plat}_bld`, ['pluginDiv'],
+                                `Build for ${plat}`,
+                                'click',
+                                () => {
+                                    //nada
+                                });
+
+                            //Build release button
+                            nojq.ce('div',
+                                `#${plat}_bld`,
+                                `${plat}_bld_rel`, ['pluginDivChidren', 'div-opt-container'],
+                                'Build release',
+                                'click',
+                                () => {
+                                    //console.log('rel clicked');
+                                    setTimeout(() => {
+                                        var newChProc_Build_rel_all = execFile;
+                                        newChProc_Build_rel_all(corcmd, ['build', `${plat}`, '--release'], { cwd: curWDir },
+                                            (error, stderr, stdout) => {
+
+                                                if (error) {
+                                                    messageBox.comeon(error, stderr);
+                                                    progrSs.good(() => {});
+                                                } else {
+                                                    messageBox.comeon(stderr, stdout);
+                                                    progrSs.good(() => {});
+                                                }
+
+                                            });
+                                    }, 1000);
+                                    progrSs.strt();
+                                });
+
+                            //Build debug button
+                            nojq.ce('div',
+                                `#${plat}_bld`,
+                                `${plat}_bld_deb`, ['pluginDivChidren', 'div-opt-container'],
+                                'Build debug',
+                                'click',
+                                () => {
+                                    //console.log('deb clicked');
+                                    setTimeout(() => {
+                                        var newChProc_Build_deb_all = execFile;
+                                        newChProc_Build_deb_all(corcmd, ['build', `${plat}`, '--debug'], { cwd: curWDir },
+                                            (error, stderr, stdout) => {
+
+                                                if (error) {
+                                                    messageBox.comeon(error, stderr);
+                                                    progrSs.good(() => {});
+                                                } else {
+                                                    messageBox.comeon(stderr, stdout);
+                                                    progrSs.good(() => {});
+                                                }
+
+                                            });
+                                    }, 1000);
+                                    progrSs.strt();
+                                });
+
+                            
+                        }
+
+
+                    }
+                }
+
+            }
+        });
+    }
+    //check platforms
+
     nojq.fc('#main-content', `
+        <div id="build-all-plat" ></div> 
         <div class="pluginDiv" style="text-align: center;">Android build options</div>
         <div id="build-unsign-div" class="pluginDiv">Build unsigned
             <div class="div-opt-container">
@@ -1851,7 +1976,7 @@ bld.page = () => {
      * Build debug unsigned project //TODO: not tested yet 
      * and make a function with it for all builds
      */
-    nojq.evhl('#build-unsign-deb', 'click', () =>{ 
+    nojq.evhl('#build-unsign-deb', 'click', () => {
         progrSs.strt();
         setTimeout(() => {
             //get the process
@@ -1863,18 +1988,20 @@ bld.page = () => {
 
                     if (error) {
                         messageBox.comeon(error, stderr);
+                        progrSs.good(() => {});
                     } else {
-                        messageBox.comeon(stderr);
+                        messageBox.comeon(stderr, stdout);
+                        progrSs.good(() => {});
                     }
 
-            });
+                });
         }, 1000);
     });
 
     /**
      * build release unsigned //TODO: not tested yet
      */
-    nojq.evhl('#build-unsign-rel', 'click', () =>{ 
+    nojq.evhl('#build-unsign-rel', 'click', () => {
         progrSs.strt();
         setTimeout(() => {
             //get the process
@@ -1892,17 +2019,17 @@ bld.page = () => {
                         });
                     }
 
-            });
-            }, 1000);
+                });
+        }, 1000);
     });
 
     /**
      * Browse for key === trigger input file
      * Don't know for now how to do it
      */
-     nojq.evhl('#build-sign-browseK', 'click', () => {
+    nojq.evhl('#build-sign-browseK', 'click', () => {
         $('#build-sign-Kstore-path-inp-file').click();
-     });
+    });
 
     /**
      *Build signed //validation required here as in other forms //to check
@@ -1910,7 +2037,7 @@ bld.page = () => {
     //event handler
     nojq.evhl('#build-sign-button', 'click', () => {
         setTimeout(() => {
-                //get path input
+            //get path input
             var ph = nojq.v('#build-sign-Kstore-path-inp');
 
             //get keystore password
@@ -1926,7 +2053,7 @@ bld.page = () => {
             //if (true) {} else {}
             newChProc_Build(corcmd, ['build', 'android', '--release', '--', `--keystore=${ph}`, `--storePassword=${ksp}`, `--alias=${al}`, `--password=${kp}`], { cwd: curWDir },
                 (error, stderr, stdout) => {
-                
+
                     if (error) {
                         messageBox.comeon(error, stderr);
                     } else {
@@ -1934,7 +2061,7 @@ bld.page = () => {
                             messageBox.comeon(stderr);
                         });
                     }
-            });
+                });
         }, 1000);
         progrSs.strt();
     });
@@ -1950,11 +2077,11 @@ bld.page = () => {
      */
     fse.readJson('./user/keys/allkeys.json', (err, exK) => {
         if (err) {
-             messageBox.comeon(err); 
+            messageBox.comeon(err);
         } else {
             for (let [k, v] of Object.entries(exK)) {
                 //console.log(k, v);
-                
+
                 //create div for each stored key
                 nojq.ce('div',
                     '#build-sign-existingK-div',
@@ -1964,7 +2091,7 @@ bld.page = () => {
                     () => {
                         //set path input
                         nojq.v('#build-sign-Kstore-path-inp', `${v.Path}\\${k}.keystore`);
-                        
+
                         //set keystore password
                         nojq.v('#build-sign-KS-pass-input', `${v.Password}`);
 
@@ -1978,8 +2105,7 @@ bld.page = () => {
                 //append path
                 nojq.ce('div',
                     `#${k}`,
-                    `${k}-opt`,
-                    ['div-opt-container', 'orange'],
+                    `${k}-opt`, ['div-opt-container', 'orange'],
                     `${v.Path}`);
             }
         }
@@ -2009,12 +2135,12 @@ bld.page = () => {
     //get data
     fse.readJson('./user/keys/lastkey.json', (err, kjs) => {
         if (err) {
-            messageBox.comeon(err); 
+            messageBox.comeon(err);
         } else {
             //handle dname 
             for (let [k, v] of Object.entries(kjs.dname)) {
                 //console.log(k, v)
-                    //sets div with label and input
+                //sets div with label and input
                 $('<div/>', {
                     id: `${k}_DN`
                 }).appendTo('#sign-div-dname-container');
@@ -2053,12 +2179,12 @@ bld.page = () => {
             } //);
 
             //get dname values into variables to make them optional
-            var cn  = $('#Name_DN-input').val(),
-                o   = $('#Organization_DN-input').val(),
-                ou  = $('#Unit_DN-input').val(),
-                l   = $('#Town_DN-input').val(),
-                c   = $('#Country_DN-input').val(),
-                s   = $('#State_DN-input').val();
+            var cn = $('#Name_DN-input').val(),
+                o = $('#Organization_DN-input').val(),
+                ou = $('#Unit_DN-input').val(),
+                l = $('#Town_DN-input').val(),
+                c = $('#Country_DN-input').val(),
+                s = $('#State_DN-input').val();
 
             //Make this a unique string
             var DName = `cn=${cn}, o=${o}, ou=${ou}, l=${l}, s=${s}, c=${c}`;
@@ -2172,7 +2298,7 @@ bld.page = () => {
                                 //get allkeys.json obj
                                 fse.readJson('./user/keys/allkeys.json', (err, objK) => {
                                     if (err) {
-                                         messageBox.comeon(err); 
+                                        messageBox.comeon(err);
                                     } else {
                                         //get info to put inside
                                         var n = Nm;
@@ -2407,11 +2533,11 @@ var env = {
      * The form for env variables
      *
      */
-    page : () => {
-        /**
-         * Fill content
-         */
-        nojq.fc('#main-content', `
+    page: () => {
+            /**
+             * Fill content
+             */
+            nojq.fc('#main-content', `
                 <div id="env" class="pluginDiv">
                     <div id="cordova-env"><input id="c-env-path-inp-file" type="file">
                         <label for="cordova-env">cordova.cmd</label><br>
@@ -2436,89 +2562,89 @@ var env = {
                     </div>
                 </div>
             `);
-        /**
-         * click event for cordova env
-         */
-        nojq.evhl('#browse-c-env', 'click', () => {
-            //open file input
-            $('#c-env-path-inp-file').click();
+            /**
+             * click event for cordova env
+             */
+            nojq.evhl('#browse-c-env', 'click', () => {
+                //open file input
+                $('#c-env-path-inp-file').click();
 
-            //get the change to fill input
-            nojq.evhl('#c-env-path-inp-file', 'change', () => {
-                nojq.v('#c-env', nojq.v('#c-env-path-inp-file'));
-                corcmd = nojq.v('#c-env-path-inp-file');
+                //get the change to fill input
+                nojq.evhl('#c-env-path-inp-file', 'change', () => {
+                    nojq.v('#c-env', nojq.v('#c-env-path-inp-file'));
+                    corcmd = nojq.v('#c-env-path-inp-file');
+                });
             });
-        });
 
-        /**
-         * click event for keytool env
-         */
-        nojq.evhl('#browse-k-env', 'click', () => {
-            //open file input
-            $('#k-env-path-inp-file').click();
+            /**
+             * click event for keytool env
+             */
+            nojq.evhl('#browse-k-env', 'click', () => {
+                //open file input
+                $('#k-env-path-inp-file').click();
 
-            //get the change to fill input
-            nojq.evhl('#k-env-path-inp-file', 'change', () => {
-                nojq.v('#k-env', nojq.v('#k-env-path-inp-file'));
-                ktx = nojq.v('#k-env-path-inp-file');
+                //get the change to fill input
+                nojq.evhl('#k-env-path-inp-file', 'change', () => {
+                    nojq.v('#k-env', nojq.v('#k-env-path-inp-file'));
+                    ktx = nojq.v('#k-env-path-inp-file');
+                });
             });
-        });
 
-        /**
-         * click event for editor env
-         */
-        nojq.evhl('#browse-e-env', 'click', () => {
-            //open file input
-            $('#e-env-path-inp-file').click();
+            /**
+             * click event for editor env
+             */
+            nojq.evhl('#browse-e-env', 'click', () => {
+                //open file input
+                $('#e-env-path-inp-file').click();
 
-            //get the change to fill input
-            nojq.evhl('#e-env-path-inp-file', 'change', () => {
-                nojq.v('#e-env', nojq.v('#e-env-path-inp-file'));
-                edx = nojq.v('#e-env-path-inp-file');
+                //get the change to fill input
+                nojq.evhl('#e-env-path-inp-file', 'change', () => {
+                    nojq.v('#e-env', nojq.v('#e-env-path-inp-file'));
+                    edx = nojq.v('#e-env-path-inp-file');
+                });
             });
-        });
 
-        /**
-         * Valid button to write cmdPath.json to have them persistent
-         */
-        nojq.evhl('#valid-env-pths', 'click', () => {
-            var objEnv = {
-                cxPth: nojq.v('#c-env'),
-                kxPth: nojq.v('#k-env'),
-                exPth: nojq.v('#e-env')
-            };
-            //write it
-            fse.writeJson('./user/cmdPath.json', objEnv, (err) => {
+            /**
+             * Valid button to write cmdPath.json to have them persistent
+             */
+            nojq.evhl('#valid-env-pths', 'click', () => {
+                var objEnv = {
+                    cxPth: nojq.v('#c-env'),
+                    kxPth: nojq.v('#k-env'),
+                    exPth: nojq.v('#e-env')
+                };
+                //write it
+                fse.writeJson('./user/cmdPath.json', objEnv, (err) => {
+                    if (err) {
+                        messageBox.comeon(err);
+                    } else {
+                        //console.log('writed', objEnv);
+                    }
+                });
+            });
+
+            /**
+             * Function to get env pth vars
+             */
+            fse.readJson('./user/cmdPath.json', (err, d) => {
                 if (err) {
                     messageBox.comeon(err);
                 } else {
-                    //console.log('writed', objEnv);
+                    //set vars
+                    corcmd = d.cxPth;
+                    ktx = d.kxPth;
+                    edx = d.exPth;
+                    //console.log(corcmd, ktx, edx);
+
+                    //set input values
+                    nojq.v('#c-env', corcmd);
+                    nojq.v('#k-env', ktx);
+                    nojq.v('#e-env', edx);
                 }
             });
-        });
 
-        /**
-         * Function to get env pth vars
-         */
-        fse.readJson('./user/cmdPath.json', (err, d) => {
-            if (err) {
-                messageBox.comeon(err);
-            } else {
-                //set vars
-                corcmd = d.cxPth;
-                ktx    = d.kxPth;
-                edx    = d.exPth;
-                //console.log(corcmd, ktx, edx);
 
-                //set input values
-                nojq.v('#c-env', corcmd);
-                nojq.v('#k-env', ktx);
-                nojq.v('#e-env', edx);
-            }
-        });
-        
-
-    }//end of page
+        } //end of page
 };
 /**
  * globals for env path
@@ -2526,8 +2652,8 @@ var env = {
  * @type       {string}
  */
 var corcmd = 'cordova.cmd',
-    ktx    = 'keytool.exe',
-    edx    = '';
+    ktx = 'keytool.exe',
+    edx = '';
 
 
 

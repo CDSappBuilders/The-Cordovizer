@@ -179,19 +179,17 @@ nav {
 }
 
 #pickWwwFold {
-    border-width: 2px;
+    border-width: 4px;
     border-style: outset;
-    border-color: buttonface;
-    border-image: initial;
-    background-color: buttonface;
-    color: rgba(0,0,0,0.8);
+    border-color: white;
+    color: inherit;
     text-align: center;
-    font-size: 1em;
-    width: 62vw;
-    height: 8vh;
+    font-size: 1.5em;
+    width: 65.7%;
+    height: 70vh;
     position: fixed;
-    top: 29vh;
-    left: 30.5vw;
+    top: 12vh;
+    left: 27.5vw;
     border-radius: 5px;
     padding: 2vh;
     z-index: -5;
