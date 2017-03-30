@@ -47,7 +47,7 @@ We'll release v1.0.0 when we'll have:
 	- [ ] All Cordova platform support
 	- [ ] Less than 1% of jQuery functions
 	- [ ] A realistic progress bar
-Fill free to extend this list.
+	- [ ] Fill free to extend this list.
 
  
 
