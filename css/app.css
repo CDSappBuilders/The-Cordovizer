@@ -1,3 +1,18 @@
+/*The Cordovizer CSS
+    Copyright 2017 Joris PROT <jp@cdswebbuilder.eu>
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
 
 ::-webkit-scrollbar{
     display: none;
@@ -126,25 +141,7 @@ nav {
     overflow: scroll;
     z-index: 1;
 }
-/*
-#pickFold {
-    border-width: 2px;
-    border-style: outset;
-    border-color: buttonface;
-    border-image: initial;
-    background-color: buttonface;
-    color: rgba(0,0,0,0.8);
-    text-align: center;
-    font-size: 1em;
-    width: 62vw;
-    height: 8vh;
-    position: fixed;
-    top: 62vh;
-    left: 30.5vw;
-    border-radius: 5px;
-    padding: 2vh;
-}
-*/
+
 #build-sign-existingK-div {
     background: rgb(54, 54, 54)!important;
     width: 99%;
@@ -208,11 +205,12 @@ input, button {
 }
 
 #prgrs-svg {
-    width: 70vw;
+        width: 80vw;
     position: relative;
-    bottom: 0vh;
-    left: 0vw;
+    top: 19%;
     border: 0px solid black;
+    display: inherit;
+    margin: auto;
 }
 
 .greyDivNavActive {
@@ -288,6 +286,7 @@ input, button {
     float: right;
     border: 0px;
 }
+
 .vers {
     color: rgba(0, 0, 255, 0.6);
     text-shadow: 0px 0px 1px rgba(49, 49, 255, 0.5);
@@ -408,7 +407,6 @@ textarea {
     -webkit-app-region: no-drag;
 }
 
-/**style for SVG*/
 .svg-window-buttons {
     border: 0px solid black;
     border-radius: 4px;

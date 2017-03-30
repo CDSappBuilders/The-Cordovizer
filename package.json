@@ -22,16 +22,16 @@
   },
   "node-remote": [],
   "nodejs": true,
-  "description": "none for now",
+  "description": "The first, free open-source standalone do-everything-locally-even-without-internet-connection, GUI tool exclusively dedicated to Cordova projects.",
   "main": "index.html",
   "webkit": {
     "double_tap_to_zoom_enabled": false,
     "plugin": false
   },
-  "app_name": "TheCordovizer-1.0.0-Beta",
+  "app_name": "The-Cordovizer",
   "window": {
     "height": 650,
-    "id": "987654321",
+    "id": "1",
     "frame": false,
     "show": true,
     "fullscreen": false,
@@ -41,14 +41,14 @@
     "kiosk_emulation": false,
     "kiosk": false,
     "visible": true,
-    "icon": "./icons/logo-cordo-beta4-512.png",
+    "icon": "./icons/logo-cordo-beta4-216.png",
     "as_desktop": false,
     "width": 800,
     "always_on_top": false,
     "title": "The Cordovizer",
     "transparent": false,
     "min_height": 0,
-    "exe_icon": "icons\\logo-cordo-beta2-512.png",
+    "exe_icon": "./icons/logo-cordo-beta4-64.png",
     "position": "center",
     "visible_on_all_workspaces": false
   },
@@ -70,9 +70,8 @@
     "linux-x32": false
   },
   "keywords": [
-    "none",
-    "for",
-    "now"
+    "Cordova GUI",
+    "Cordova project manager"
   ],
   "additional_trust_anchors": [],
   "devDependencies": {

@@ -1,5 +1,4 @@
-# The Cordovizer	
----
+# The Cordovizer
 
    Copyright 2017 Joris PROT <jp@cdswebbuilder.eu>
 
@@ -16,11 +15,11 @@
    limitations under the License.
 
 # Cordova core plugins
----
+
 Cordova core plugins are all released under [Apache License](http://www.apache.org/licenses/LICENSE-2.0)
 
 # Production and developement dependencies
----
+
 Please read [licences.md](./licences.md)
 
  

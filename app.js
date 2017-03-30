@@ -1,6 +1,22 @@
 /*jshint  esnext: true, node: true, jquery: true, devel: true */
 /*globals nw, exec, path, progrSs, fse, xmlParser, marked */
 
+/**
+ *    Copyright 2017 Joris PROT <jp@cdswebbuilder.eu>
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 //Get main window object
 var curWin = nw.Window.get();
 
@@ -31,8 +47,8 @@ curWin.on('loaded', () => {
 var curWDir, WwwDir, dirN, v, addedPlug, addedPlats, docPlatform, opendWin, line;
 
 /**
- * Slowly but surely removing jquery by little functions here      ///////////////////////////////
- * We will use very short names hope you've got a good editor...  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+ * Slowly but surely removing jquery by little functions here
+ * We will use very short names 
  */
 
 /**
@@ -156,6 +172,14 @@ var nojq = {
         }
     },
 
+    /**
+     * { function_description }
+     *
+     * @param      string  el      The element which attr we want to deal with
+     * @param      string  attr    The attribute name
+     * @param      string  atVal   The attribute value
+     * @return     string  return attribute value of said element
+     */
     at: (el, attr, atVal) => {
         //get elem
         var elem = document.querySelector(el);
@@ -168,11 +192,9 @@ var nojq = {
         } else {
             var getAtVal = elem.getAttribute(attr);
             return getAtVal;
-
         }
     }
 };
-//nojq end
 
 /**
  *Setting main content event handlers
@@ -203,6 +225,10 @@ nojq.evhl('#closeW', 'click', () => { curWin.close(); });
 nojq.evhl('#sets', 'click', () => {
     env.page();
 });
+
+/**
+ *Navigation
+ */
 
 /**
  * Setting nav event handlers
@@ -245,57 +271,6 @@ nojq.evhl('#launch-edit', 'click', () => {
     }
 });
 
-
-//test buttons
-/**test evhl
-nojq.evhl('#but', 'click', () => {
-    /*fse.readdir('./node_modules', (err, f) => {
-        if (err) {
-            console.log(err);
-        } else {
-            for (var i = 0; i < f.length; i++) {
-                fse.readFile(`./node_modules/${f[i]}/license`, (err, data) => {
-                    fse.appendFile('./licences2.md', `#${f[i]}\n${data}\n`, (err) => {
-
-                    });
-                });
-               // if (true) {} else {} 
-               //console.log(f[i]);
-            }
-        }
-    });//*/
-
-/*to only include production dependencies 
-    nlf.find({
-        directory: './',
-        summary: 'detail'
-    }, function (err, data) {
-        // do something with the response object. 
-        fse.writeJson('./licences2.json', data, (err) => {
-            console.log(err, 'or done');
-        });
-    });//
-
-    fse.readJson('./licences2.json', (err, da) => {
-        if (err) {console.log(err);} else {
-            $.each(da, (i, v) => {
-                //console.log(v);
-                if (v.licenseSources.license.sources[0]) {
-                    fse.appendFile('./licenses.md',`#${v.id}\n${v.repository}\n---\n${v.licenseSources.license.sources[0].text}\n`, 'utf-8', (err)=> {console.log(err,'or done');} );
-                } else {
-                    fse.appendFile('./licenses.md',`#${v.id}\n${v.repository}\n---\n${v.licenseSources.package.sources[0].license}\n`, 'utf-8', (err)=> {console.log(err,'or done');} );
-                }
-
-                });
-            
-        }
-    });
-});//*
-
-/**
- *Navigation
- */
-
 /**
  * Function to highlight selected ol-child
  * jQuery removed***
@@ -306,20 +281,7 @@ nojq.evhl('#but', 'click', () => {
  * @param      function  pageFn    The function that displays the correspondant view
  */
 function selectOl(whichOne, pageFn) {
-    /**get element for removing
-    var nolc = document.querySelector('.nav-ol-child');
 
-    //remove class
-    nolc.classList.remove('nav-ol-selected');
-
-    //get element for adding
-    var nolcS = document.querySelector(whichOne);
-
-    //add class
-    nolcS.classList.add('nav-ol-selected');
-
-    //Display page
-    pageFn();*/
     $('.nav-ol-child').removeClass('nav-ol-selected');
     $(whichOne).addClass('nav-ol-selected');
     pageFn();
@@ -331,13 +293,11 @@ function selectOl(whichOne, pageFn) {
  * @type       Object     
  */
 var createProj = {};
+
 /**
  * Function first view: user could drop a folder containing web code
  * or create a hellocordova project to start from scratch
- *
- * 
  */
-
 createProj.drop = () => {
     /**
      * Fill main-content
@@ -387,8 +347,7 @@ createProj.drop = () => {
 };
 
 /**
- * TODO...
- *
+ * Create form
  */
 createProj.page = () => {
 
@@ -446,7 +405,10 @@ createProj.page = () => {
     });
 };
 
-//do the thing
+/**
+ * Function that create project 
+ *
+ */
 createProj.action = () => {
 
     //
@@ -482,7 +444,8 @@ createProj.action = () => {
 
             progrSs.good(() => {});
 
-        } else { //send the action
+        } else {
+            //send the action
             //handle header
             curWDir = `${pth}\\${fold}`;
 
@@ -493,7 +456,6 @@ createProj.action = () => {
             createProj.projectsJson(`${pth}\\${fold}`, name);
 
             //create config.json
-            //this function is in app.js
             xml(`${pth}\\${fold}\\config.xml`, `${pth}\\${fold}\\config.json`);
 
             //end progress bar
@@ -518,7 +480,6 @@ createProj.changeWww = (p, f, www, n) => {
     curWDir = cordoPath;
 
     //indicate cwd in header
-    //
     nojq.fc('header', cordoPath);
 
     //replacement append here
@@ -532,9 +493,17 @@ createProj.changeWww = (p, f, www, n) => {
     });
 };
 
-//Update ./user/projects.json
-//This is the index file where all created projects main data are stocked
-//used to set curWdir
+
+
+/**
+ * Update ./user/projects.json
+ * This is the index file where all created projects main data are stocked
+ * used to set curWdir
+ *
+ * @param      {<type>}  foldPath  The folder path
+ * @param      {<type>}  n         { parameter_description }
+ * @return     {<type>}  { description_of_the_return_value }
+ */
 createProj.projectsJson = (foldPath, n) => {
     //create or update json file for user projects index
     fse.readJson('././user/projects.json', (err, projets) => {
@@ -581,7 +550,6 @@ const chooseProject = () => {
         (err, obj) => {
 
             //display data in a div for each project
-            //for(let [key, value] of Object.entries(obj))
             for (let [key, value] of Object.entries(obj)) {
 
                 /**
@@ -594,7 +562,8 @@ const chooseProject = () => {
                     'click',
                     () => {
                         curWDir = value.path;
-                        //Fill header with nojq.fc( )
+
+                        //Fill header with path of project
                         nojq.fc('header', curWDir);
 
                         //Change color on select
@@ -632,16 +601,22 @@ const chooseProject = () => {
         });
 };
 
-//
-//Plugin add start
+/**
+ * Container for plugin function
+ *
+ * @type       object
+ */
 var pl = {};
 
-//add native plug
+/**
+ * Native/Core plugins page
+ *
+ */
 pl.page = () => {
     //empty content
     nojq.fc('#main-content', '');
 
-    //get already installed plugins in cwd
+    //get already installed plugins
     fse.readdir(`${curWDir}\\plugins`, (err, files) => {
         addedPlug = files;
 
@@ -676,7 +651,7 @@ pl.page = () => {
                     'class': 'pluginDivChidren',
                     click: () => {
 
-                        //dislay the docs in new window this function is on line 456
+                        //dislay the docs in new window
                         md.readWriteInNewWin(`./user/cordova_plugins/${value}/README.md`, './new_window_open/cre.html');
                     }
                 }).appendTo(`#${value} .div-opt-container`);
@@ -706,9 +681,7 @@ pl.page = () => {
 
                 //check for already installed plugins
                 var isAdded = $.inArray(value, addedPlug);
-                if (isAdded === -1) {
-                    //messageBox.comeon(`${value} pas la`);messageBox.comeon($.inArray(value, addedPlug));
-                } //todo: make it a function to reuse after plugAdd
+                if (isAdded === -1) {} //todo: make it a function to reuse after plugAdd
                 else {
                     pl.afterAddPlu(value);
                 }
@@ -717,28 +690,33 @@ pl.page = () => {
     });
 };
 
+/**
+ * Third-party plugins page
+ *
+ */
 pl.thptyPage = () => {
-    //clear view
     //empty content
     nojq.fc('#main-content', '');
-
-    //and set content
+    
     /**
      *Add plugin by name when online = true
      */
+    //and set content
     $('<div/>', {
         id: 'add-thrd-plug',
-        'class': 'pluginDiv'
+        'class': 'pluginDiv',
+        html: 'Name the plugin you want to add'
     }).appendTo('#main-content');
 
     //put input in precedent div
     $('<input>', {
         css: {
             width: '70%'
-        }
+        },
+        placeholder: 'cordova-plugin-name'
     }).appendTo('#add-thrd-plug');
 
-    //put button to add
+    //Add button
     $('<div/>', {
             id: 'add-thrd-plug-butt',
             text: 'Add plugin',
@@ -749,10 +727,8 @@ pl.thptyPage = () => {
                 top: '2.6vh'
             }
         }).appendTo('#add-thrd-plug')
-        //here we go for function add third party plugin
+        //here we go for function 'add third party plugin'
         .click(() => {
-            //Store var for template string
-            //var trdPlugToAdd = $('#add-thrd-plug input').val(); 
 
             //check input value
             if ($('#add-thrd-plug input').val() === '') {
@@ -783,10 +759,11 @@ pl.thptyPage = () => {
                             //prompt user
                             messageBox.comeon(`Plugin ${inputVal} added for offline use`);
 
-                            //put plugin in project
+                            //put plugin in user's project
                             newChProcAddPlugThrdAdd(corcmd, [`plugin`, `add`, `--save`, $('#add-thrd-plug input').val()], {
                                 cwd: curWDir
                             }, (error, stdout, stderr) => {
+
                                 //error    
                                 if (error) {
                                     messageBox.comeon(error);
@@ -802,10 +779,10 @@ pl.thptyPage = () => {
         }); //end add trd plug button
 
     /**
-     *Search plugin
+     *Search plugin online
      */
 
-    //Open cordova plugin search page in browser
+    //Open cordova plugin search page in user's default browser
     $('<div/>', {
         id: 'cordo-plugin-browser-win',
         'class': 'pluginDiv',
@@ -819,7 +796,7 @@ pl.thptyPage = () => {
         'class': 'div-opt-container'
     }).appendTo('#cordo-plugin-browser-win');
 
-    //button browse in precedent div
+    //browse button
     $('<div/>', {
         id: 'cordo-plugin-browser-win-butt',
         'class': 'pluginDivChidren',
@@ -830,6 +807,10 @@ pl.thptyPage = () => {
         }
     }).appendTo('#thpty-opt-cont');
 
+
+    /**
+     * Display installed third-pty plugins
+     */
     //div just for title
     $('<div/>', {
         'class': 'pluginDiv',
@@ -839,13 +820,13 @@ pl.thptyPage = () => {
         }
     }).appendTo('#main-content');
 
-    //div to contain existing third pty plug make it scrollable and content not
+    //div to contain existing third pty plug
     $('<div/>', {
         id: 'exist-thrdplug-div'
     }).appendTo('#main-content');
 
     //look for existing ones
-    //TODOmake it a function to reload div after adding new plug from 
+    //TODO: make it a function to reload div after adding new plug from 
     fse.readdir('./user/plugin_container/plugins', (error, files) => {
         //console.log(files);
         $.each(files, (i, v) => {
@@ -862,19 +843,19 @@ pl.thptyPage = () => {
                     'class': 'div-opt-container'
                 }).appendTo(`#${v}`);
 
-                //read the doc button
+                //'read the doc' button
                 $('<div/>', {
                     id: `${v}_plugDoc`,
                     text: 'read the doc',
                     'class': 'pluginDivChidren',
                     click: () => {
 
-                        //dislay the docs in new window this function is on line 456
+                        //dislay the docs in new window
                         md.readWriteInNewWin(`./user/plugin_container/plugins/${v}/README.md`, './new_window_open/cre.html');
                     }
                 }).appendTo(`#${v} .div-opt-container`);
 
-                //add button
+                //'add plugin' button
                 $('<div/>', {
                     id: `${v}_plugAdd`,
                     text: 'Add plugin',
@@ -898,20 +879,24 @@ pl.thptyPage = () => {
                 //check for already installed plugins
                 var isAdded = $.inArray(v, addedPlug);
                 if (isAdded === -1) {
-                    //messageBox.comeon(`${value} pas la`);messageBox.comeon($.inArray(value, addedPlug));
-                } //todo: make it a function to reuse after plugAdd
-                else {
+                    //donothing
+                } else {
                     pl.afterAddPlu(v);
                 }
-            } //end if  
+            }
         });
     });
 };
 
-//add plugin        
+/**
+ * Adds a plug.
+ *
+ * @param      string       val     The name of the plugin
+ * @param      {<type>}     shPath  The search path 
+ */
 pl.addPlug = (val, shPath) => {
 
-    //declaring C_P under different name in order to test kill of processes
+    //declaring C_P 
     var newChProcAddPlug = execFile;
 
     //exec
@@ -936,14 +921,18 @@ pl.addPlug = (val, shPath) => {
         }
     });
 };
-pl.removePlug = (val) => {
 
-    //messageBox.comeon(hFol);
+/**
+ * Removes a plug.
+ *
+ * @param      string  val     The name of plugin to remove
+ */
+pl.removePlug = (val) => {
 
     //execFile for remove plugin
     var newChProc_RmPlug = execFile;
 
-    //and so on
+    //and come on
     newChProc_RmPlug(corcmd, [`plugin`, `rm`, `--save`, `${val}`], {
         cwd: curWDir
     }, (error, stdout, stderr) => {
@@ -954,21 +943,28 @@ pl.removePlug = (val) => {
             messageBox.comeon(`${val} removed from:<br>${curWDir}<br>Cordova said: ${stdout}`);
         }
 
+        //end progress bar
         progrSs.good(() => {});
 
+        //change div apearance
         $(`#${val}_plugAdd`).attr('data-added', 0);
         $(`#${val}`).removeClass('div-proj-selected');
 
-        //fc to fill that, it's a test
+        //change button content
         nojq.fc(`#${val}_plugAdd`, 'Add plugin');
 
+        //update plugin list
         fse.readdir(`${curWDir}\\plugins`, (err, files) => {
             addedPlug = files;
         });
     });
 };
 
-//sets button and signal plugin is here
+/**
+ * Change button and div appearance after plugin is added
+ *
+ * @param      string       a       The name of the plugin
+ */
 pl.afterAddPlu = (a) => {
     $(`#${a}`).addClass('div-proj-selected');
     $(`#${a}_plugAdd`).attr('data-added', 1);
@@ -978,10 +974,16 @@ pl.afterAddPlu = (a) => {
 };
 
 /**
- *Run Emulate
+ * Container for 'Run' functions
+ *
+ * @type       object
  */
 var runProject = {};
 
+/**
+ * Run page
+ *
+ */
 runProject.page = () => {
 
     //check if a project is selected
@@ -990,18 +992,19 @@ runProject.page = () => {
     } else {
         //empty content
         nojq.fc('#main-content', '');
-        //TODO: tell user if there is no platform installed
-        //get existing platforms with userProject/platforms/platforms.json and make a div with $.each
+
+        //get existing platforms with userProject/platforms/platforms.json and make a div for each
         fse.readJson(`${curWDir}\\platforms\\platforms.json`, (err, plats) => {
             if (err) {
                 messageBox.comeon(err);
             } else {
 
+                //check for platforms in user's project
                 if (Object.keys(plats).length === 0) {
                     nojq.fc('#main-content', '<div style="text-align:center;">There is no platform installed in your project,<br>please go to platform page to add one</div>');
                     //console.log(plats);
                 } else {
-                    $.each(plats, (platform, version) => {
+                    for (let [platform, version] of Object.entries(plats)) {
 
                         //create the div 
                         $('<div/>', {
@@ -1024,17 +1027,18 @@ runProject.page = () => {
                                 runProject.run(platform);
                             }
                         }).appendTo(`#${platform} .div-opt-container`);
-
-                    });
+                    }
                 }
-
             }
         });
     } //else
-
 };
 
-//function
+/**
+ * Run for platform
+ *
+ * @param      string  platform  The platform user wnt to run for
+ */
 runProject.action = (platform) => {
     //set false end to progress bar
     setTimeout(progrSs.good(() => {}), 20000);
@@ -1046,21 +1050,35 @@ runProject.action = (platform) => {
     //...
     newChProc_Run(corcmd, [`run`, `${platform}`], { cwd: curWDir }, (error, stderr, stdout) => {
         if (error) {
+            //promt user
             messageBox.comeon(`Cordova said: ${error}.<br>This means that you don't fulfill all requirements to run your project for this platform<br>
-                <a target="_blank" href="http://cordova.apache.org/docs/en/latest/">Please see online documentation</a>
+                <span id="onl-doc" >Please see online documentation</span>
                  or the offline one <span id="messDocPlatLink">here</span>`);
+
+            //event handler for online doc
+            nojq.evhl('#onl-doc', 'click', () => {
+                //open user's default browser
+                var onlDoc = nw.Shell.openExternal('http://cordova.apache.org/docs/en/latest/');
+            });
+
+            //event handler for offline doc: sends user to platform page where there's a doc for each platform
             nojq.evhl('#messDocPlatLink', 'click', () => {
                 plat.checkPlat();
             });
             progrSs.good(() => {});
         } else {
+            //everything ok, so say it !
             messageBox.comeon(`Running ${stdout}`);
             progrSs.good(() => {});
         }
     });
 };
 
-//run the above function with progress bar
+/**
+ * Run the above function with progress bar
+ *
+ * @param      string       pl      The platform name
+ */
 runProject.run = (pl) => {
 
     //launch function after progress bar started
@@ -1069,12 +1087,11 @@ runProject.run = (pl) => {
     //starting progress bar
     progrSs.strt();
 
-    //appending new toggle button 
+    //appending new toggle button to reduce window
     //TODO: Please check if there is one existing
     //if (existing) {don't display it !!}
     //
     //okay let's put another data attr to the header
-    //done!
     var dataTog = $('header').attr('data-togbutt');
     if (dataTog == 0) {
 
@@ -1088,14 +1105,17 @@ runProject.run = (pl) => {
     }
 };
 
-//function to reduce window, put it on top of all others, and display run again button.
+/**
+ * To reduce window, put it on top of all others, and display run again button.
+ *
+ * @param      {Function}       cb      A callback in case it's needed
+ */
 runProject.reduceCurWin = (cb) => {
 
     //set width
     curWin.resizeTo(50, 130);
 
     //set on top
-    //TODO: button to toggle that
     curWin.setAlwaysOnTop(true);
 
     //handle header
@@ -1105,7 +1125,7 @@ runProject.reduceCurWin = (cb) => {
     //enhance it
     $('header').css('height', '30px');
 
-    //Add data attr  (ramdomly choose the header to handle this task)
+    //Add data attr
     $('header').attr('data-runbutt', 1);
 
     //put everything else under the ground
@@ -1119,15 +1139,16 @@ runProject.reduceCurWin = (cb) => {
 
     //making a cb just in case
     cb();
-
 };
 
-//append new buttons to remote window
+/**
+ * Appends a new button to remote little window
+ *
+ * @param      {<type>}  platform  The platform will run-again for
+ */
 runProject.appendNewButton = (platform) => {
 
-    //TODO: add minimize button too !! please...
-
-    //put a div to contain toggle and minimize
+    //Sets a div to contain toggle and minimize
     $('<div/>', {
         id: 'toggled-win-command-container',
         css: {
@@ -1155,6 +1176,7 @@ runProject.appendNewButton = (platform) => {
         `,
         css: { display: 'inline-block' }
     }).click(() => {
+        //minimize it
         curWin.minimize();
     }).appendTo('#toggled-win-command-container');
 
@@ -1167,7 +1189,9 @@ runProject.appendNewButton = (platform) => {
             <path id="fulls-path" d="M 15 10 L 15 90 H 85 V 10" stroke="black" stroke-width="5" fill="none"/>
         </svg>
         `,
-        css: { display: 'inline-block' }
+        css: {
+            display: 'inline-block' 
+        }
     }).click(() => {
 
         //remove buttons
@@ -1191,7 +1215,7 @@ runProject.appendNewButton = (platform) => {
         //give back the window a little hummility
         curWin.setAlwaysOnTop(false);
 
-        //hide option container
+        //show window buttons
         $('#window-option-container').show();
 
     }).appendTo('#toggled-win-command-container');
@@ -1205,10 +1229,8 @@ runProject.appendNewButton = (platform) => {
             top: '35px'
         }
     }).click(() => {
-        //console.log('run again clicked');
 
         //Run the app on device or emulator 
-        //here to kill process if needed.. it seems so!
 
         //var execF..
         var newChProc_RunAgain = execFile;
@@ -1236,16 +1258,20 @@ runProject.appendNewButton = (platform) => {
             top: '75px'
         }
     }).click(() => {
-
+        //open devtools
         nw.Window.open(`chrome://inspect/#devices/`, {
             width: 700,
             height: 400
         });
-
     }).appendTo('#remmote-window-container');
 };
 
-//append the button to the current window to toggle it to little
+/**
+ * Append the button in current window to toggle it to little
+ *
+ * @param      string       platform  The platform
+ * @return     {<type>}  { description_of_the_return_value }
+ */
 runProject.togButt = (platform) => {
     //append button to toggle to little window remote button run again
     $('<div/>', {
@@ -1259,16 +1285,21 @@ runProject.togButt = (platform) => {
 
                 //append div button when reducing
                 runProject.appendNewButton(platform);
-
             });
         }
     }).appendTo('#ol');
 };
 
 /**
- *Platform
+ * Platform functions container
+ *
+ * @type       object
  */
 var plat = {};
+
+/**
+ * Avaible platforms
+ */
 plat.platform = {
     android: 'android',
     blackberry10: 'Blackberry 10',
@@ -1278,11 +1309,11 @@ plat.platform = {
     windows: 'Windows 8'
 };
 
+/**
+ * Look for existing platforms in user project directory
+ */
 plat.checkPlat = () => {
 
-    /**
-     *Look for existing platforms in user project directory
-     */
     //TODO: check the same but with /platforms.json
     fse.readdir(`${curWDir}\\platforms`, (err, files) => {
         addedPlats = files;
@@ -1299,7 +1330,6 @@ plat.checkPlat = () => {
 /**
  * Platform main page
  *
- * @return     {<type>}  { description_of_the_return_value }
  */
 plat.menu = () => {
 
@@ -1392,15 +1422,15 @@ plat.menu = () => {
                         progrSs.strt();
                     }
                 }
-                //messageBox.comeon(addedPlats);
             }
         }).appendTo(`#${key} .div-opt-container`);
 
         //Check for installed platforms
         var addeds = $.inArray(key, addedPlats);
         if (addeds === -1) {
-            //messageBox.comeon(`${value} pas la ${addeds}`);
-        } else { //messageBox.comeon(`${value} isHere`);
+            //donada
+        } else {
+            //change btn appearance
             plat.btnChange(key);
         }
     });
@@ -1455,7 +1485,6 @@ plat.rm = (a) => {
             $(`#${a}`).removeClass('div-proj-selected');
             $(`#${a}_platAdd`).attr('data-added', 0);
             nojq.fc(`#${a}_platAdd`, 'Add platform');
-
         }
     });
 };
@@ -1481,16 +1510,15 @@ plat.btnChange = (a) => {
 };
 
 /**
- *Edit config.xml
+ *Edit config.xml container
  */
 var cfxml = {};
 
 /**
  * Edit config.xml page
  *
- * @return     {<type>}  { description_of_the_return_value }
  */
-cfxml.page = () => { //TODO: update config.json with new config.xml
+cfxml.page = () => {
     //empty content
     nojq.fc('#main-content', '');
 
@@ -1603,7 +1631,6 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                 /**
                  *Preferences
                  */
-                //here we try to deal with preferences
                 $('<input>', {
                     id: 'pref-name',
                     placeholder: 'Name'
@@ -1631,9 +1658,7 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
 
                         //fill pref obj
                         cfxml.pref[value.attr.name] = value.attr.value;
-                    }
-                    //TODO: recup json to put in object ...
-                    else {
+                    } else {
                         $('<div/>', {
                             id: `${key}_pref`,
                             html: `${value.name} <span class="vers">${value.value}</span>`
@@ -1659,21 +1684,19 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                             $('#pref-name').val('');
                             $('#pref-value').val('');
 
-                            //TODO: add out put to show already setted preferences maybe modifying node mod function
+                            //TODO: add output to show setted preferences maybe modifying node mod function
 
                             //pass the info to config.json
-                            //this function is in app.js
                             xml(`${curWDir}\\config.xml`, `${curWDir}\\config.json`);
                         });
                     }
                 }).appendTo('#preference');
                 //preferences end
-                //
 
                 /**
                  *Author
                  */
-                //TODO: make a 'save' button and nearly same behavior as preferences below
+                //TODO: maybe make a 'save' button and nearly same behavior as preferences below
                 $('<div/>', { id: 'authorItems' }).appendTo('#author');
                 $('<span/>', {
                     text: 'Name'
@@ -1715,10 +1738,7 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                         html: `${v.attr.name}`
                     }).appendTo('#platform');
 
-                    /** 
-                     * not very good! have to check if multiple entrys instead of checking for ios
-                     * isArray?
-                     */
+                    //check ios to display allow-int
                     if (v.attr.name === 'ios') {
                         $.each(v['allow-intent'], (i, val) => {
                             //messageBox.comeon(i);
@@ -1779,11 +1799,10 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
                     configXml.setPreference(n, v);
                 });
 
-
+                //write the file
                 configXml.write(() => {
                     messageBox.comeon('You successfully edited your Cordova project config.xml file');
-                    //create config.json in order to work with config.wml
-                    //this function is in app.js, has said before..
+                    //update config.json in order to work with config.wml
                     xml(`${curWDir}\\config.xml`, `${curWDir}\\config.json`);
                 });
             }
@@ -1791,10 +1810,14 @@ cfxml.page = () => { //TODO: update config.json with new config.xml
     }
 };
 
-//Object to store pref
+/**
+ * Object to store pref
+ */
 cfxml.pref = {};
 
-//parsed json: filled by config.json object
+/**
+ * var object filled by config.json object
+ */
 cfxml.pJ
 
 /**
@@ -1825,22 +1848,29 @@ cfxml.layout = {
  */
 
 /**
- * build var
+ * Container for build functions
  *
  * @type       object 
  */
 var bld = {};
 
+/**
+ * Check existing platform to build for
+ *
+ */
 bld.checkPlat = () => {
     //check if a project is selected
     if (!curWDir) {
         messageBox.comeon('Please select a project or create a new one');
     } else {
-
+        //nada
     }
 }
 
-//y Vamos
+/**
+ * Build page fn
+ *
+ */
 bld.page = () => {
     /**
      * Set content
@@ -1854,15 +1884,15 @@ bld.page = () => {
             if (err) {
                 messageBox.comeon(err);
             } else {
-
+                //if no platform do this
                 if (Object.keys(plats).length === 0) {
                     nojq.fc('#main-content', '<div style="text-align:center;">There is no platform installed in your project,<br>please go to platform page to add one</div>');
                     //console.log(plats);
                 } else {
+                    /**
+                     * Display platforms and build options Very basic for now 
+                     */
                     for (let [plat, v] of Object.entries(plats)) {
-                        /**
-                         * Display platforms and build options Very basic for now 
-                         */
 
                         //Get rid of android in this, we handled it separately before
                         if (plat != 'android') {
@@ -1926,19 +1956,17 @@ bld.page = () => {
                                     }, 1000);
                                     progrSs.strt();
                                 });
-
-                            
                         }
-
-
                     }
                 }
-
             }
         });
     }
-    //check platforms
+    //check platforms end
 
+    /**
+     * Fill content with build divs
+     */
     nojq.fc('#main-content', `
         <div id="build-all-plat" ></div> 
         <div class="pluginDiv" style="text-align: center;">Android build options</div>
@@ -1973,8 +2001,7 @@ bld.page = () => {
         `);
 
     /**
-     * Build debug unsigned project //TODO: not tested yet 
-     * and make a function with it for all builds
+     * Build debug unsigned android project //TODO: make a function with it for all builds
      */
     nojq.evhl('#build-unsign-deb', 'click', () => {
         progrSs.strt();
@@ -1993,13 +2020,12 @@ bld.page = () => {
                         messageBox.comeon(stderr, stdout);
                         progrSs.good(() => {});
                     }
-
                 });
         }, 1000);
     });
 
     /**
-     * build release unsigned //TODO: not tested yet
+     * build release unsigned 
      */
     nojq.evhl('#build-unsign-rel', 'click', () => {
         progrSs.strt();
@@ -2025,7 +2051,6 @@ bld.page = () => {
 
     /**
      * Browse for key === trigger input file
-     * Don't know for now how to do it
      */
     nojq.evhl('#build-sign-browseK', 'click', () => {
         $('#build-sign-Kstore-path-inp-file').click();
@@ -2066,9 +2091,8 @@ bld.page = () => {
         progrSs.strt();
     });
 
+    //change value of input file
     nojq.evhl('#build-sign-Kstore-path-inp-file', 'change', () => {
-        //var parPth = path.parse(nojq.v('#build-sign-Kstore-path-inp-file'));
-        //console.log(parPth);
         nojq.v('#build-sign-Kstore-path-inp', nojq.v('#build-sign-Kstore-path-inp-file'));
     });
 
@@ -2112,24 +2136,9 @@ bld.page = () => {
     });
 
     /**
-     *Create key with java Keytool
+     * Create key with java Keytool
      */
     //data in ./user/keys/lastkey.json
-
-    //Create keystore div
-    /**$('<div/>', {
-        id: 'sign-div',
-        'class': 'pluginDiv',
-        html: 'Create keystore'
-    }).appendTo('#main-content');*/
-
-    //Dname div
-    /**$('<div/>', {
-        id: 'sign-div-dname-container',
-        css: {
-            border: '1px solid black'
-        }
-    }).appendTo('#sign-div');*/
 
     //Fill it with inputs
     //get data
@@ -2137,7 +2146,7 @@ bld.page = () => {
         if (err) {
             messageBox.comeon(err);
         } else {
-            //handle dname 
+            //handle dname separately because it's itself an object
             for (let [k, v] of Object.entries(kjs.dname)) {
                 //console.log(k, v)
                 //sets div with label and input
@@ -2146,7 +2155,7 @@ bld.page = () => {
                 }).appendTo('#sign-div-dname-container');
 
                 /**
-                 * Not working nobody knows why !
+                 * Not working, nobody knows why,
                  * Without jQuery it seems the file stop to be reading at the first value
                  * maybe because it's empty
                  
@@ -2154,13 +2163,16 @@ bld.page = () => {
                     '#sign-div-dname-container',
                     k,
                     [''],
-                    k);*/
+                    k);
+                 */
 
+                //set label for DName inputs
                 $('<label/>', {
                     'for': k,
                     html: k
                 }).appendTo(`#${k}_DN`);
 
+                //and inputs
                 $('<input>', {
                         id: `${k}_DN-input`,
                         name: k,
@@ -2176,7 +2188,7 @@ bld.page = () => {
                         //test write file
                         fse.writeJson('./user/keys/lastkey.json', kjs);
                     });
-            } //);
+            }
 
             //get dname values into variables to make them optional
             var cn = $('#Name_DN-input').val(),
@@ -2189,7 +2201,7 @@ bld.page = () => {
             //Make this a unique string
             var DName = `cn=${cn}, o=${o}, ou=${ou}, l=${l}, s=${s}, c=${c}`;
 
-            //container for others
+            //container for others than DName
             $('<div/>', {
                 id: 'sign-div-ks-container',
                 css: {
@@ -2222,7 +2234,10 @@ bld.page = () => {
                 }
             }
 
-            //customize inputs
+            /**
+             * Customize inputs
+             */
+
             //Path
             //open file input (temporary before adding button)
             $('#Path-input').click(() => {
@@ -2247,9 +2262,10 @@ bld.page = () => {
                     fse.writeJson('./user/keys/lastkey.json', kjs);
                 });
 
-            //validity input
+            //validity input automaticly created
             $('#Validity-input').remove();
 
+            //sets new input number more apropriate for validity
             $('<input>', {
                     id: 'Validity-number-input',
                     type: 'number',
@@ -2287,9 +2303,7 @@ bld.page = () => {
                         //execFile
                         var newChProc_Key = execFile;
 
-                        //and do it...\keytool.exe C:\\Program Files\\Android\\Android Studio\\jre\\jre\\bin\\
-                        //TODO: make this an input to choose or a research with fse and get the good path here 
-                        //because environement variable path is tricky with keytool, in my config at least
+                        //and do it...\keytool.exe 
                         newChProc_Key(ktx, ['-genkeypair', '-dname', DName, '-keystore', PathKs, '-alias', $('#Alias-input').val(), '-storepass', $('#Password-input').val(), '-keypass', $('#PasswordKey-input').val(), '-validity', $('#Validity-number-input').val()], (error, stdout, stderr) => {
                             if (error) {
                                 messageBox.comeon(error);
@@ -2321,22 +2335,27 @@ bld.page = () => {
                             }
                         });
                     }, 2000);
-
                 });
         }
     });
 };
 
-
-
 /**
- *Message Box to replace console logs
+ *Message Box to prompt user what's going on
  */
 
-//Message box object and so on...
+/**
+ * Message box container 
+ *
+ * @type       object
+ */
 const messageBox = {};
 
-//this done, here we go
+/**
+ * here we go
+ *
+ * @param      string  message  The message 
+ */
 messageBox.comeon = (message) => {
 
     //check if window is littled by runProject function
@@ -2369,10 +2388,7 @@ messageBox.comeon = (message) => {
             }
         }).appendTo('#messBox_text');
 
-    } //end If
-
-    //display message in new window when native is toggled to little
-    else {
+    } else { //display message in new window when native is toggled to little
         fse.writeFile('./new_window_open/cre.html', `
             <!DOCTYPE html>
                 <html>
@@ -2391,7 +2407,7 @@ messageBox.comeon = (message) => {
                 id: 'newWindowMBox',
                 'frame': false
 
-                //resize function in the callback, this is temporary before setting 
+                //resize function, this is temporary before setting 
                 //an onload function to hide the window when loading
             }, (newWin) => {
                 //console.log('new win opened');
@@ -2401,33 +2417,23 @@ messageBox.comeon = (message) => {
     }
 };
 
-
-/**
- *Frameless window stuff goes just here
- */
-
-//TODO: find a way to add draggable zone on devtools/#devices window and a close button-->will never happen sorry
-
-//noFrame object is created here
-//var noFrame = {};
-
-//and here we go
-//TODO: put click handler to div instead of svg
-//sets divs for the buttons
-
-
-//append svg's to previously created divs
-
-
 /**
 Markdown handler for docs and readme.md's
 */
 var md = {};
+
+/**
+ * Reads file and write in new window.
+ *
+ * @param      string     fileToRead   The file to read
+ * @param      string     fileToWrite  The file to write and put on new window
+ */
 md.readWriteInNewWin = (fileToRead, fileToWrite) => {
     fse.readFile(fileToRead, 'utf-8', (err, data) => {
 
         //messageBox.comeon(data);
         var redat = marked(data);
+
         //messageBox.comeon(redat);
         var readHtml = `<!DOCTYPE html>
                 <html>
@@ -2450,14 +2456,23 @@ md.readWriteInNewWin = (fileToRead, fileToWrite) => {
         fse.writeFile(fileToWrite, readHtml, 'utf-8', (error) => {
             nw.Window.open(fileToWrite);
         });
-
     });
-
 };
 
-//test to supply marked with large files
+/**
+ * Container for function test to supply marked with large files
+ *
+ * @type       object
+ */
 var htm = {};
 
+/**
+ * Reads a html file and 'new window open' with html instead of markdown.
+ *
+ * @param      string      fileToRead   The file to read
+ * @param      string      fileToWrite  The file to write
+ * @param      {Function}  cb           A cb just in case
+ */
 htm.readHtmlFileNWinOpen = (fileToRead, fileToWrite, cb) => {
     fse.readFile(fileToRead, 'utf-8', (err, data) => {
         if (err) { messageBox.comeon(err); }
@@ -2493,12 +2508,16 @@ htm.readHtmlFileNWinOpen = (fileToRead, fileToWrite, cb) => {
 };
 
 /**
- *Online status indicator
+ * Online status indicator
+ *
+ * @type       object
  */
-//object
 var onl = {};
 
-//fn
+/**
+ * Check for online status
+ *
+ */
 onl.check = () => {
 
     //fill line variable
@@ -2534,10 +2553,8 @@ var env = {
      *
      */
     page: () => {
-            /**
-             * Fill content
-             */
-            nojq.fc('#main-content', `
+        //Fill content
+        nojq.fc('#main-content', `
                 <div id="env" class="pluginDiv">
                     <div id="cordova-env"><input id="c-env-path-inp-file" type="file">
                         <label for="cordova-env">cordova.cmd</label><br>
@@ -2562,89 +2579,87 @@ var env = {
                     </div>
                 </div>
             `);
-            /**
-             * click event for cordova env
-             */
-            nojq.evhl('#browse-c-env', 'click', () => {
-                //open file input
-                $('#c-env-path-inp-file').click();
+        /**
+         * click event for cordova env
+         */
+        nojq.evhl('#browse-c-env', 'click', () => {
+            //open file input
+            $('#c-env-path-inp-file').click();
 
-                //get the change to fill input
-                nojq.evhl('#c-env-path-inp-file', 'change', () => {
-                    nojq.v('#c-env', nojq.v('#c-env-path-inp-file'));
-                    corcmd = nojq.v('#c-env-path-inp-file');
-                });
+            //get the change to fill input
+            nojq.evhl('#c-env-path-inp-file', 'change', () => {
+                nojq.v('#c-env', nojq.v('#c-env-path-inp-file'));
+                corcmd = nojq.v('#c-env-path-inp-file');
             });
+        });
 
-            /**
-             * click event for keytool env
-             */
-            nojq.evhl('#browse-k-env', 'click', () => {
-                //open file input
-                $('#k-env-path-inp-file').click();
+        /**
+         * click event for keytool env
+         */
+        nojq.evhl('#browse-k-env', 'click', () => {
+            //open file input
+            $('#k-env-path-inp-file').click();
 
-                //get the change to fill input
-                nojq.evhl('#k-env-path-inp-file', 'change', () => {
-                    nojq.v('#k-env', nojq.v('#k-env-path-inp-file'));
-                    ktx = nojq.v('#k-env-path-inp-file');
-                });
+            //get the change to fill input
+            nojq.evhl('#k-env-path-inp-file', 'change', () => {
+                nojq.v('#k-env', nojq.v('#k-env-path-inp-file'));
+                ktx = nojq.v('#k-env-path-inp-file');
             });
+        });
 
-            /**
-             * click event for editor env
-             */
-            nojq.evhl('#browse-e-env', 'click', () => {
-                //open file input
-                $('#e-env-path-inp-file').click();
+        /**
+         * click event for editor env
+         */
+        nojq.evhl('#browse-e-env', 'click', () => {
+            //open file input
+            $('#e-env-path-inp-file').click();
 
-                //get the change to fill input
-                nojq.evhl('#e-env-path-inp-file', 'change', () => {
-                    nojq.v('#e-env', nojq.v('#e-env-path-inp-file'));
-                    edx = nojq.v('#e-env-path-inp-file');
-                });
+            //get the change to fill input
+            nojq.evhl('#e-env-path-inp-file', 'change', () => {
+                nojq.v('#e-env', nojq.v('#e-env-path-inp-file'));
+                edx = nojq.v('#e-env-path-inp-file');
             });
+        });
 
-            /**
-             * Valid button to write cmdPath.json to have them persistent
-             */
-            nojq.evhl('#valid-env-pths', 'click', () => {
-                var objEnv = {
-                    cxPth: nojq.v('#c-env'),
-                    kxPth: nojq.v('#k-env'),
-                    exPth: nojq.v('#e-env')
-                };
-                //write it
-                fse.writeJson('./user/cmdPath.json', objEnv, (err) => {
-                    if (err) {
-                        messageBox.comeon(err);
-                    } else {
-                        //console.log('writed', objEnv);
-                    }
-                });
-            });
-
-            /**
-             * Function to get env pth vars
-             */
-            fse.readJson('./user/cmdPath.json', (err, d) => {
+        /**
+         * Valid button to write cmdPath.json to have them persistent
+         */
+        nojq.evhl('#valid-env-pths', 'click', () => {
+            var objEnv = {
+                cxPth: nojq.v('#c-env'),
+                kxPth: nojq.v('#k-env'),
+                exPth: nojq.v('#e-env')
+            };
+            //write it
+            fse.writeJson('./user/cmdPath.json', objEnv, (err) => {
                 if (err) {
                     messageBox.comeon(err);
                 } else {
-                    //set vars
-                    corcmd = d.cxPth;
-                    ktx = d.kxPth;
-                    edx = d.exPth;
-                    //console.log(corcmd, ktx, edx);
-
-                    //set input values
-                    nojq.v('#c-env', corcmd);
-                    nojq.v('#k-env', ktx);
-                    nojq.v('#e-env', edx);
+                    //console.log('writed', objEnv);
                 }
             });
+        });
 
+        /**
+         * Function to get env pth vars
+         */
+        fse.readJson('./user/cmdPath.json', (err, d) => {
+            if (err) {
+                messageBox.comeon(err);
+            } else {
+                //set vars
+                corcmd = d.cxPth;
+                ktx = d.kxPth;
+                edx = d.exPth;
+                //console.log(corcmd, ktx, edx);
 
-        } //end of page
+                //set input values
+                nojq.v('#c-env', corcmd);
+                nojq.v('#k-env', ktx);
+                nojq.v('#e-env', edx);
+            }
+        });
+    }
 };
 /**
  * globals for env path
@@ -2659,7 +2674,7 @@ var corcmd = 'cordova.cmd',
 
 
 /**
- * Former app.js with declarations of node_modules with their parameters when needed
+ * Declarations of node_modules with their parameters when needed
  */
 
 //Declarations
@@ -2736,10 +2751,12 @@ const Config = require('cordova-config');
 //const configXml = new Config('config.xml');
 // Write the config file 
 //configXml.writeSync();
-var nlf = require('nlf');
+const nlf = require('nlf');
 
 
-//First view
+/**
+ * First view of the app
+ */
 createProj.drop();
 
 //prevent dragover 
