@@ -1,4 +1,6 @@
-# The Cordovizer
+[![Build Status](https://travis-ci.org/CDSappBuilders/The-Cordovizer.svg?branch=master)](https://travis-ci.org/CDSappBuilders/The-Cordovizer)
+
+# The Cordovizer 
 
 Please meet the Cordovizer, the first GUI tool exclusively dedicated to Cordova projects:
 - Create and manage Cordova projects locally.
