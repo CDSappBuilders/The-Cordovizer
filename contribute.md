@@ -1,5 +1,4 @@
 # Contributors
----
 
 ## Welcome
 If you are here, it means that you may have some interest on helping this
@@ -41,13 +40,14 @@ Code the way you like to.
 
 ## What's next
 We'll release v1.0.0 when we'll have:
-	- [ ] Full online documentation
-	- [ ] Full offline help
-	- [ ] All desktop platform support
-	- [ ] All Cordova platform support
-	- [ ] Less than 1% of jQuery functions
-	- [ ] A realistic progress bar
-	- [ ] Fill free to extend this list.
+- [ ] Full online documentation
+- [ ] Full offline help
+- [ ] All desktop platform support
+- [ ] All Cordova platform support
+- [ ] Less than 1% of jQuery functions
+- [ ] A realistic progress bar
+
+Fill free to extend this list...
 
  
 
