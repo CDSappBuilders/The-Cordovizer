@@ -18,7 +18,7 @@ If you want to help more, see [contribute.md](./contribute.md).
 ## Getting started
 
 ### Use directly
-Get the ZIP on our [website](http://www.cdswebbuilder.eu).
+Get the ZIP on our [website](http://www.cordovizer.cdswebbuilder.eu).
 
 Unzip it and execute The-Cordovizer-beta-v0.1.0-yourPlatform.exe
 
