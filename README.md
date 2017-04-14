@@ -45,7 +45,7 @@ Suggested workflow:
 - When it's running, click "Edit" that will launch your editor on current Cordova project.
 - Click "Toggle to little remote window" which is little and stays on top of your editor window so you can re-run your project when editing.
 - Click "Debug", also in little remote window, this will open "devices window" from devtools. There you'll be able to find your device or emulator. Just click on "inspect" under the one your working on.
-- Click "build", you'll find build options for all platforms installed in your project. *Special treatment for Android, because for now we develloped around it. But don't be shy! You can help with knowledge or hard code*.
+- Click "build", you'll find build options for all platforms installed in your project. *Special treatment for Android, because for now we develloped around it. But don't be shy! [You can help with knowledge or hard code](./contribute.md)*.
 - Enjoy, and if you don't, please let us know.
 
 
