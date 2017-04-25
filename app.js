@@ -273,17 +273,17 @@ nojq.evhl('#launch-edit', 'click', () => {
 
 /**
  * Function to highlight selected ol-child
- * jQuery removed***
- * 
- * //TODO: Try foreach will be better
+ * jQuery not removed***
  *
  * @param      string    whichOne  The element selector
  * @param      function  pageFn    The function that displays the correspondant view
  */
 function selectOl(whichOne, pageFn) {
-
+    
     $('.nav-ol-child').removeClass('nav-ol-selected');
-    $(whichOne).addClass('nav-ol-selected');
+    //document.getElementsByClassName('nav-ol-child').classList.remove('nav-ol-selected');
+    document.querySelector(whichOne).classList.add('nav-ol-selected');
+    //$().addClass();
     pageFn();
 }
 
@@ -568,9 +568,8 @@ const chooseProject = () => {
 
                         //Change color on select
                         $('.div-proj-selected').removeClass('div-proj-selected');
-                        $(`#${key}`).addClass('div-proj-selected');
-                        $('header').attr('data-k', key);
-                        //messageBox.comeon(curWDir);
+                        document.getElementById(`${key}`).classList.add('div-proj-selected');
+                        nojq.at('header', 'data-k', key);
                     });
 
                 /**
@@ -622,7 +621,8 @@ pl.page = () => {
 
         //make a div for each plugin avaible offline
         fse.readdir('./user/cordova_plugins', (err, files) => {
-            $.each(files, (index, value) => {
+
+            for (let [index, value] of Object.entries(files)) {
                 $('<div/>', {
                     id: value,
                     html: value,
@@ -685,7 +685,7 @@ pl.page = () => {
                 else {
                     pl.afterAddPlu(value);
                 }
-            });
+            }
         });
     });
 };
@@ -947,8 +947,8 @@ pl.removePlug = (val) => {
         progrSs.good(() => {});
 
         //change div apearance
-        $(`#${val}_plugAdd`).attr('data-added', 0);
-        $(`#${val}`).removeClass('div-proj-selected');
+        nojq.at(`#${val}_plugAdd`, 'data-added', 0);
+        document.getElementById(`${val}`).classList.remove('div-proj-selected');
 
         //change button content
         nojq.fc(`#${val}_plugAdd`, 'Add plugin');
@@ -1068,7 +1068,12 @@ runProject.action = (platform) => {
             progrSs.good(() => {});
         } else {
             //everything ok, so say it !
-            messageBox.comeon(`Running ${stdout}`);
+            if (nojq.at('#head', 'data-runbutt') === '1') {
+                //nada please
+            } else {
+                messageBox.comeon(`Running ${stdout}`);
+            }
+            
             progrSs.good(() => {});
         }
     });
@@ -2405,7 +2410,7 @@ messageBox.comeon = (message) => {
             //openning new window
             var newWin = nw.Window.open('./new_window_open/cre.html', {
                 id: 'newWindowMBox',
-                'frame': false
+                'frame': true
 
                 //resize function, this is temporary before setting 
                 //an onload function to hide the window when loading
@@ -2777,3 +2782,10 @@ function xml(pathx, pathj) {
         });
     });
 }
+
+// include and initialize the rollbar library with your access token
+var rollbar = require("rollbar");
+rollbar.init("df61326075064feea17af484e309a2f9");
+
+// record a generic message and send to rollbar
+rollbar.reportMessage("Hello world!");

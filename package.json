@@ -1,83 +1,92 @@
 {
-    "devDependencies": {
-        "nlf": "^1.4.3"
-    },
-    "additional_trust_anchors": [],
-    "main": "index.html",
-    "name": "The-Cordovizer",
-    "window": {
-        "visible_on_all_workspaces": false,
-        "kiosk": false,
-        "show": true,
-        "show_in_taskbar": true,
-        "exe_icon": "./icons/logo-cordo-beta4-64.png",
-        "resizable": true,
-        "fullscreen": false,
-        "height": 650,
-        "id": "w1",
-        "icon": "./icons/logo-cordo-beta4-216.png",
-        "title": "The Cordovizer",
-        "min_width": 0,
-        "min_height": 0,
-        "transparent": false,
-        "frame": false,
-        "kiosk_emulation": false,
-        "as_desktop": false,
-        "width": 800,
-        "visible": true,
-        "always_on_top": false,
-        "position": "center"
-    },
-    "description": "The first, free open-source standalone do-everything-locally-even-without-internet-connection, GUI tool exclusively dedicated to Cordova projects.",
-    "webkit": {
-        "plugin": false,
-        "double_tap_to_zoom_enabled": false
-    },
-    "nodejs": true,
-    "keywords": [
-        "Cordova",
-        "GUI",
-        "Cordova",
-        "project",
-        "manager"
-    ],
-    "dependencies": {
-        "cordova-config": "^0.6.2",
-        "showdown": "^1.5.0",
-        "showdown-table": "^1.0.1",
-        "ncp": "^2.0.0",
-        "highlight.js": "^9.8.0",
-        "xml2js": "^0.4.17",
-        "marked": "^0.3.6",
-        "fs-extra": "^1.0.0"
-    },
-    "app_name": "The-Cordovizer-v0.1.0-mac-x64",
-    "node-remote": [],
-    "webview": {
-        "partitions": [
-            {
-                "name": "trusted",
-                "accessible_resources": [
-                    "<all_urls>"
-                ]
-            }
+  "devDependencies": {
+    "nlf": "^1.4.3"
+  },
+  "additional_trust_anchors": [],
+  "main": "index.html",
+  "name": "The-Cordovizer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CDSappBuilders/The-Cordovizer"
+  },
+  "bugs": {
+    "url": "https://github.com/CDSappBuilders/The-Cordovizer/issues"
+  },
+  "homepage": "http://cordovizer.cdswebbuilder.eu"
+  "window": {
+    "visible_on_all_workspaces": false,
+    "kiosk": false,
+    "show": true,
+    "show_in_taskbar": true,
+    "exe_icon": "./icons/logo-cordo-beta4-64.png",
+    "resizable": true,
+    "fullscreen": false,
+    "height": 650,
+    "id": "w1",
+    "icon": "./icons/logo-cordo-beta4-216.png",
+    "title": "The Cordovizer",
+    "min_width": 0,
+    "min_height": 0,
+    "transparent": false,
+    "frame": false,
+    "kiosk_emulation": false,
+    "as_desktop": false,
+    "width": 800,
+    "visible": true,
+    "always_on_top": false,
+    "position": "center"
+  },
+  "description": "The first, free open-source standalone do-everything-locally-even-without-internet-connection, GUI tool exclusively dedicated to Cordova projects.",
+  "webkit": {
+    "plugin": false,
+    "double_tap_to_zoom_enabled": false
+  },
+  "nodejs": true,
+  "keywords": [
+    "Cordova",
+    "GUI",
+    "Cordova",
+    "project",
+    "manager"
+  ],
+  "dependencies": {
+    "cordova-config": "^0.6.2",
+    "fs-extra": "^1.0.0",
+    "highlight.js": "^9.8.0",
+    "marked": "^0.3.6",
+    "ncp": "^2.0.0",
+    "rollbar": "^2.0.0-alpha.4",
+    "showdown": "^1.5.0",
+    "showdown-table": "^1.0.1",
+    "xml2js": "^0.4.17"
+  },
+  "app_name": "The-Cordovizer-v0.1.0",
+  "node-remote": [],
+  "webview": {
+    "partitions": [
+      {
+        "name": "trusted",
+        "accessible_resources": [
+          "<all_urls>"
         ]
-    },
-    "webexe_settings": {
-        "download_dir": "C:/Users/jo/AppData/Local/Web2Executable/Web2Executable/files/downloads",
-        "mac-x64": true,
-        "windows-x64": false,
-        "nw_compression_level": 0,
-        "nw_version": "0.21.6",
-        "uncompressed_folder": true,
-        "linux-x32": false,
-        "output_pattern": "",
-        "custom_script": "",
-        "linux-x64": false,
-        "windows-x32": false,
-        "sdk_build": true,
-        "export_dir": "C:\\Users\\jo\\Desktop\\The-Cordovizer-v0.1.0-mac-x64",
-        "force_download": false
-    },
-    "version": "0.1.0"
+      }
+    ]
+  },
+  "webexe_settings": {
+    "download_dir": "C:/Users/jo/AppData/Local/Web2Executable/Web2Executable/files/downloads",
+    "mac-x64": true,
+    "windows-x64": false,
+    "nw_compression_level": 0,
+    "nw_version": "0.21.6",
+    "uncompressed_folder": true,
+    "linux-x32": false,
+    "output_pattern": "",
+    "custom_script": "",
+    "linux-x64": false,
+    "windows-x32": false,
+    "sdk_build": true,
+    "export_dir": "C:\\Users\\jo\\Desktop\\The-Cordovizer-v0.1.0-mac-x64",
+    "force_download": false
+  },
+  "version": "0.1.0"
 }
