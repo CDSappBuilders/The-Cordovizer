@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/CDSappBuilders/The-Cordovizer/issues"
   },
-  "homepage": "http://cordovizer.cdswebbuilder.eu"
+  "homepage": "http://cordovizer.cdswebbuilder.eu",
   "window": {
     "visible_on_all_workspaces": false,
     "kiosk": false,
